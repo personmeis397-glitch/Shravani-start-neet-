@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#050a1c">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<title>SHRAVANI - AIR 1 (NEET - 2027)</title>
+<style>
+:root{
+  --bg:#050a1c; --panel:rgba(var(--pn),.144); --line:rgba(var(--ln),.5); --glow:0 0 10px rgba(var(--cy),.35),inset 0 0 10px rgba(var(--cy),.12);
+  --text:#eef4ff; --muted:#9fb2d9;
+  --cyan:#3de1ff; --blue:#5b8cff; --violet:#a66bff; --pink:#ff6fd8;
+  --ok:#5ff5d0; --warn:#ff5c7a;
+  --cy:61,225,255; --pk:255,111,216; --vi:166,107,255; --ln:94,200,255; --dk:5,10,28; --pn:14,26,58; --okc:95,245,208; --bg1:#173a7a; --bg2:#33106a;
+  --font:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+html{background:var(--bg)}
+body{font-family:var(--font);color:var(--text);min-height:100vh;padding:20px 16px 40px;line-height:1.5;overflow-x:hidden;
+  background:var(--bg)}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;transform:translateZ(0);
+  background:radial-gradient(1100px 650px at 50% -10%,var(--bg1) 0%,transparent 60%),radial-gradient(900px 600px at 100% 100%,var(--bg2) 0%,transparent 60%)}
+.orbits{position:fixed;inset:0;pointer-events:none;z-index:0;display:grid;place-items:center;overflow:hidden}
+.orbits i{position:absolute;border-radius:50%;border:2px solid;opacity:.3;width:min(150vw,920px);height:min(60vw,380px);
+  box-shadow:0 0 14px currentColor;transform:rotate(var(--a));animation:spin var(--t) linear infinite;will-change:transform;backface-visibility:hidden}
+.orbits i:nth-child(1){color:var(--cyan);--a:-20deg;--t:60s}
+.orbits i:nth-child(2){color:var(--pink);--a:35deg;--t:80s;width:min(125vw,780px)}
+.orbits i:nth-child(3){color:var(--violet);--a:95deg;--t:100s;width:min(105vw,640px)}
+@keyframes spin{from{transform:rotate(var(--a))}to{transform:rotate(calc(var(--a) + 360deg))}}
+@media(prefers-reduced-motion:reduce){.orbits i{animation:none}}
+main{position:relative;z-index:1;max-width:880px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+main>*{min-width:0}
+.brand{display:flex;align-items:center;gap:12px}
+.emblem{filter:drop-shadow(0 0 8px rgba(var(--cy),.7)) drop-shadow(0 0 14px rgba(var(--pk),.45))}
+.brand b{display:block;font-size:.95rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text)}
+.brand small{color:var(--cyan);font-size:.78rem;letter-spacing:.08em}
+h2{font-size:.8rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);margin-bottom:14px}
+.panel{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;
+  box-shadow:var(--glow),0 10px 40px rgba(0,0,0,.09)}
+.panel::before{content:"";position:absolute;left:20px;right:20px;top:-1px;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),var(--pink),transparent);opacity:.85}
+.hero{padding:30px 20px;text-align:center}
+.hero .big{font-size:clamp(3.4rem,15vw,7.5rem);font-weight:800;letter-spacing:-.03em;line-height:1;color:#fff;font-variant-numeric:tabular-nums;
+  text-shadow:0 0 16px rgba(var(--cy),.75),0 0 44px rgba(var(--vi),.6)}
+.hero .unit{font-size:1.05rem;color:var(--pink);margin-top:8px;font-weight:600;text-shadow:0 0 12px rgba(var(--pk),.5)}
+.hero .sub{margin-top:14px;font-size:clamp(1.2rem,5vw,1.8rem);font-variant-numeric:tabular-nums;font-weight:600;color:#c6f3ff}
+.hero .meta{margin-top:6px;color:var(--muted);font-size:.9rem}
+.grid{display:grid;gap:16px;grid-template-columns:1fr 1fr}
+@media(max-width:700px){.grid{grid-template-columns:1fr}}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.stat.dl b{color:rgb(var(--pk));text-shadow:0 0 14px rgba(var(--pk),.6)}
+.stat{background:rgba(var(--dk),.13);border:1px solid var(--line);box-shadow:var(--glow);border-radius:12px;padding:10px 8px;text-align:center}
+.stat b{display:block;font-size:1.5rem;font-variant-numeric:tabular-nums;text-shadow:0 0 10px rgba(var(--cy),.55)}
+.stat span{font-size:.76rem;color:var(--muted)}
+.bar{height:10px;background:rgba(var(--dk),.16);border-radius:99px;overflow:hidden;border:1px solid var(--line);box-shadow:0 0 8px rgba(var(--cy),.3);margin-bottom:16px}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--violet),var(--pink));box-shadow:0 0 12px var(--cyan);transition:width .3s}
+.row{display:flex;align-items:center;justify-content:center;gap:12px;margin:6px 0 4px}
+button,input{font:inherit;color:var(--text)}
+.step{width:52px;height:52px;border-radius:14px;border:1px solid var(--line);background:rgba(var(--dk),.14);font-size:1.6rem;cursor:pointer;transition:.15s;box-shadow:var(--glow)}
+.step:hover{border-color:var(--cyan);box-shadow:0 0 16px rgba(var(--cy),.7),inset 0 0 10px rgba(var(--cy),.2)}
+.step:active{transform:scale(.95);border-color:var(--pink);box-shadow:0 0 16px rgba(var(--pk),.7),inset 0 0 10px rgba(var(--pk),.2)}
+input[type=number]{width:90px;height:52px;text-align:center;font-size:1.5rem;background:rgba(var(--dk),.14);border:1px solid var(--line);border-radius:14px;box-shadow:var(--glow)}
+:focus-visible{outline:2px solid var(--pink);outline-offset:2px}
+.label{text-align:center;color:var(--muted);font-size:.88rem}
+.pace{font-size:clamp(2.4rem,9vw,3.4rem);font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1;text-shadow:0 0 16px rgba(var(--pk),.55)}
+.pace small{font-size:1rem;font-weight:500;color:var(--muted);text-shadow:none}
+.status{margin-top:12px;padding:10px 12px;border-radius:12px;font-size:.92rem;border:1px solid rgba(var(--okc),.75);color:var(--ok);background:rgba(var(--okc),.014);box-shadow:0 0 10px rgba(var(--okc),.35),inset 0 0 10px rgba(var(--okc),.1)}
+.status.warn{border-color:rgba(255,92,122,.8);color:#ff8fa3;background:rgba(255,92,122,.024);font-weight:600;box-shadow:0 0 12px rgba(255,92,122,.45),inset 0 0 10px rgba(255,92,122,.12)}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+th,td{padding:10px 6px;text-align:right;border-bottom:1px solid rgba(var(--ln),.064)}
+th:first-child,td:first-child{text-align:left}
+th{font-size:.78rem;color:var(--cyan);font-weight:600;letter-spacing:.06em}
+tr:last-child td{border-bottom:0}
+td.hot{color:#ff8fa3;font-weight:600}
+.foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;color:var(--muted);font-size:.85rem}
+.link{background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;padding:6px}
+
+
+/* moving light along borders (transform-only animation = smooth) */
+.stat,.step{position:relative}
+.ring{position:absolute;inset:-1px;border-radius:inherit;padding:2px;pointer-events:none;overflow:hidden;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);mask-composite:exclude}
+.ring i{position:absolute;left:50%;top:50%;width:220%;aspect-ratio:1;
+  background:conic-gradient(transparent 0 75%,var(--cyan) 88%,#fff 95%,var(--pink) 99%,transparent 100%);
+  transform:translate(-50%,-50%) rotate(0deg);animation:ringspin 6s linear infinite;will-change:transform;backface-visibility:hidden}
+.stat .ring i{animation-duration:5s}
+.step .ring i{animation-duration:4s}
+.grid .panel:nth-child(2) .ring i{animation-direction:reverse;animation-duration:8s}
+@keyframes ringspin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.ring i{animation:none}}
+
+/* ===== Dynamic Focus view ===== */
+.view[hidden]{display:none!important}
+.nowbtn{margin-left:auto;padding:10px 24px;border-radius:99px;border:1px solid rgba(var(--pk),.65);cursor:pointer;color:#fff;font-weight:800;letter-spacing:.12em;
+  background:linear-gradient(90deg,rgba(var(--cy),.18),rgba(var(--pk),.24));text-shadow:0 0 10px rgba(var(--pk),.85);
+  box-shadow:0 0 14px rgba(var(--pk),.5),inset 0 0 10px rgba(var(--cy),.22);transition:.15s}
+.nowbtn:active{transform:scale(.95)}
+.kick{text-align:center;font-size:.8rem;letter-spacing:.22em;font-weight:700;color:var(--text);text-shadow:0 0 12px rgba(var(--cy),.8)}
+.fbig{text-align:center;font-size:clamp(3.2rem,14vw,5.5rem);font-weight:800;line-height:1;color:#fff;font-variant-numeric:tabular-nums;text-shadow:0 0 16px rgba(var(--cy),.75),0 0 40px rgba(var(--vi),.55)}
+.fbig small{font-size:1.4rem;color:var(--pink);text-shadow:0 0 12px rgba(var(--pk),.6)}
+.fsub{text-align:center;color:var(--pink);font-weight:600;margin:6px 0 12px;text-shadow:0 0 10px rgba(var(--pk),.5)}
+.fbody{font-size:.98rem;line-height:1.6}
+.fbody b{color:#fff;text-shadow:0 0 10px rgba(var(--cy),.6)}
+.fbody b.p{text-shadow:0 0 10px rgba(var(--pk),.7)}
+.ftrack{height:8px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;margin:14px 0 4px}
+.ftrack i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--pink));box-shadow:0 0 10px var(--cyan)}
+.setrow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;margin-top:14px}
+.setbox{text-align:center}
+.setbox span{display:block;font-size:.68rem;letter-spacing:.16em;color:var(--muted);margin-bottom:6px}
+.setctl{display:flex;align-items:center;justify-content:center;gap:4px}
+.setctl output{min-width:0;flex:1 1 auto;text-align:center;font-weight:600;font-size:.92rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.step.mini{flex:none;width:32px;height:32px;font-size:1.2rem;line-height:1;padding:0}
+.stats,.grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.stats:not(.three){grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+@media(max-width:700px){.grid{grid-template-columns:minmax(0,1fr)}}
+.stat span{display:block;overflow-wrap:anywhere}
+.stats.three .stat{padding:10px 4px}
+.stats.three .stat b{font-size:1.25rem}
+.status{overflow-wrap:anywhere}
+.stats.three{margin-bottom:14px}
+.hint{color:var(--muted);font-size:.8rem;margin:-6px 0 12px}
+.blocks{display:grid;gap:10px}
+.block{display:flex;align-items:center;gap:12px;text-align:left;width:100%;padding:14px;border-radius:16px;cursor:pointer;
+  border:1px solid color-mix(in srgb,var(--c) 45%,transparent);background:rgba(var(--dk),.18);
+  box-shadow:0 0 10px color-mix(in srgb,var(--c) 30%,transparent),inset 0 0 10px color-mix(in srgb,var(--c) 10%,transparent);transition:.15s}
+.block:active{transform:scale(.985)}
+.block .dot{flex:none;width:10px;height:10px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c)}
+.block b{display:block;font-size:1.02rem}
+.block.now b{text-shadow:0 0 10px rgba(var(--pk),.8)}
+.block em{display:block;font-style:normal;font-size:.86rem;font-weight:600;color:var(--c);margin-top:2px;text-shadow:0 0 8px color-mix(in srgb,var(--c) 60%,transparent)}
+.fdo{font-size:1.65rem;font-weight:800;line-height:1.2;color:#fff;text-shadow:0 0 14px rgba(var(--cy),.7);margin-bottom:6px}
+.dnc{font-weight:700;color:var(--cyan);margin-top:8px;text-shadow:0 0 10px rgba(var(--cy),.6);font-variant-numeric:tabular-nums}
+.dnc.late{color:#ff8fa3;text-shadow:0 0 10px rgba(255,92,122,.6)}
+.dnbtns{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:10px;margin-top:14px}
+.dnbtns .ghost{padding:0}
+.dnnext{margin-top:16px}
+.dnnext h3{font-size:.72rem;letter-spacing:.16em;color:var(--muted);font-weight:600;margin-bottom:6px}
+.srow{display:grid;grid-template-columns:76px minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 12px;margin-bottom:8px;border-radius:14px;border:1px solid color-mix(in srgb,var(--c) 40%,transparent);background:rgba(var(--dk),.18);box-shadow:0 0 8px color-mix(in srgb,var(--c) 22%,transparent)}
+.srow.first{box-shadow:0 0 14px color-mix(in srgb,var(--c) 55%,transparent)}
+.srow .st{font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.srow b{font-size:.95rem;color:var(--c);text-shadow:0 0 8px color-mix(in srgb,var(--c) 50%,transparent)}
+.srow .sd{font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.cfg{display:grid;grid-template-columns:minmax(0,1fr) 112px;gap:10px;align-items:center;margin-bottom:10px}
+.cfg label{color:var(--text);font-size:.95rem}
+.cfg label small{display:block;color:var(--muted);font-size:.75rem}
+.cfg input{width:112px;height:46px;font-size:1.15rem;border-radius:12px}
+.fsum{margin-top:12px;text-align:center;font-size:.86rem;color:var(--muted)}
+.cta{width:100%;padding:18px;border:0;border-radius:18px;cursor:pointer;font-size:1.1rem;font-weight:800;letter-spacing:.05em;color:#050a1c;
+  background:linear-gradient(90deg,var(--cyan),var(--pink));box-shadow:0 0 22px rgba(var(--pk),.65),0 0 10px rgba(var(--cy),.5);transition:.15s}
+.cta:active{transform:scale(.98)}
+.cta.run{background:linear-gradient(90deg,var(--pink),var(--violet));font-variant-numeric:tabular-nums}
+.live{text-align:center;color:var(--ok);font-size:.82rem;margin-top:-6px;text-shadow:0 0 10px rgba(var(--okc),.6)}
+.ghost{width:100%;padding:15px;border-radius:18px;cursor:pointer;font-size:1rem;font-weight:700;color:var(--cyan);letter-spacing:.04em;
+  border:1px solid rgba(var(--cy),.5);background:rgba(var(--dk),.15);text-shadow:0 0 8px rgba(var(--cy),.6);box-shadow:0 0 12px rgba(var(--cy),.25)}
+.ghost:active{transform:scale(.98)}
+
+/* ===== Fire theme: neon red, pink, orange and white ===== */
+body[data-theme="fire"]{
+  --bg:#0a0306; --text:#fffaf6; --muted:#f0c3c3;
+  --cyan:#ff9a3d; --blue:#ff4d6d; --violet:#ff2e4f; --pink:#ff4fa3; --ok:#ffeccf; --warn:#ff3b3b;
+  --cy:255,154,61; --pk:255,79,163; --vi:255,46,79; --ln:255,122,110; --dk:14,4,8; --pn:38,8,20; --okc:255,236,207;
+  --bg1:#5e0f30; --bg2:#6b1a06;
+  --line:rgba(255,122,110,.5);
+  --glow:0 0 10px rgba(255,154,61,.45),inset 0 0 10px rgba(255,79,163,.16)}
+body[data-theme="fire"] .hero .big,body[data-theme="fire"] .fbig{color:#fff;text-shadow:0 0 14px rgba(255,79,163,.9),0 0 34px rgba(255,46,79,.75),0 0 60px rgba(255,154,61,.5)}
+body[data-theme="fire"] .hero .sub{color:#ffe3c9}
+body[data-theme="fire"] .cta{color:#fff;text-shadow:0 0 8px rgba(0,0,0,.35)}
+body[data-theme="fire"] .cta.run{background:linear-gradient(90deg,#ff2e4f,#ff4fa3)}
+body[data-theme="fire"] .status.warn,body[data-theme="fire"] .hot{color:#ff6b6b}
+.themebtns{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.themebtns button{padding:12px;border-radius:14px;border:1px solid var(--line);background:rgba(var(--dk),.18);color:var(--text);font-weight:700;cursor:pointer}
+.themebtns button.on{border-color:var(--cyan);box-shadow:0 0 12px rgba(var(--cy),.5);color:var(--cyan)}
+</style>
+</head>
+<body>
+<script>try{var t=localStorage.getItem("neet2027-theme");if(t==="fire"||t==="kage")document.body.setAttribute("data-theme","fire")}catch(e){}</script>
+<div class="orbits" aria-hidden="true"><i></i><i></i><i></i></div>
+<main class="view" id="home">
+  <header class="brand">
+    <svg class="emblem" viewBox="0 0 48 48" width="46" height="46" aria-hidden="true"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--cyan)"/><stop offset="1" stop-color="var(--pink)"/></linearGradient></defs><circle cx="24" cy="24" r="21" style="fill:var(--bg)" stroke="url(#g)" stroke-width="2"/><ellipse cx="24" cy="24" rx="21" ry="8" fill="none" stroke="url(#g)" stroke-width="1.2" transform="rotate(-25 24 24)" opacity=".8"/><text x="24" y="32" text-anchor="middle" font-size="24" font-weight="800" fill="url(#g)" font-family="system-ui,sans-serif">S</text></svg>
+    <div><b>Shravani · AIR 1</b><small>NEET 2027 · Exam day 2 May 2027</small></div>
+    <button class="nowbtn" id="nowBtn" type="button">Now</button>
+  </header>
+
+  <section class="panel" id="startCard">
+    <h2>Your NEET journey</h2>
+    <div class="fbody" id="startTxt"></div>
+    <button class="cta" id="startBtn" type="button" style="margin-top:12px">Start NEET</button>
+  </section>
+
+  <section class="panel hero" aria-live="off">
+    <div class="big" id="hours">0</div>
+    <div class="unit">Shravani has this many hours remaining</div>
+    <div class="sub" id="clock">00:00 min · 00 sec</div>
+    <div class="meta" id="daysMeta"></div>
+  </section>
+
+  <div class="grid">
+    <section class="panel">
+      <h2>Lecture tracker</h2>
+      <div class="stats">
+        <div class="stat"><b id="remLec">890</b><span>lectures left</span></div>
+        <div class="stat"><b id="pct">0%</b><span>done</span></div>
+        <div class="stat"><b id="remHrs">1780</b><span>hours left</span></div>
+        <div class="stat dl"><b id="dLeft">0</b><span>days left to exam</span></div>
+      </div>
+      <div class="bar"><i id="barFill"></i></div>
+      <div class="label" id="lblToday">Lectures watched today (2 h each)</div>
+      <div class="row">
+        <button class="step" id="dec" aria-label="Remove one lecture">−</button>
+        <input type="number" id="today" min="0" inputmode="numeric" aria-label="Lectures watched today" value="0">
+        <button class="step" id="inc" aria-label="Add one lecture">+</button>
+      </div>
+      <div class="label" id="todayHrs">0 hours logged today</div>
+    </section>
+
+    <section class="panel">
+      <h2>Daily target pace</h2>
+      <div class="pace"><span id="pace">0.0</span> <small>lectures / day</small></div>
+      <div class="label" style="text-align:left;margin-top:4px" id="paceLec"></div>
+      <div class="status" id="status"></div>
+    </section>
+  </div>
+
+  <section class="panel">
+    <h2>Speed optimizer</h2>
+    <table>
+      <thead><tr><th>Speed</th><th>Hours left</th><th>Hours / day</th><th>Hours saved</th></tr></thead>
+      <tbody id="speedBody"></tbody>
+    </table>
+    <div class="hint" id="spHint" style="margin:8px 0 0"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Lecture history</h2>
+    <table><thead><tr><th>Day</th><th>Lectures</th><th>Time</th></tr></thead><tbody id="histBody"></tbody></table>
+    <div class="label" id="histSum" style="text-align:left;margin-top:10px"></div>
+  </section>
+
+  <section class="panel" id="setup">
+    <h2>Course setup</h2>
+    <div class="cfg"><label for="cfgTotal">Total lectures<small>In your whole course</small></label><input type="number" id="cfgTotal" min="1" max="5000" step="1" inputmode="numeric"></div>
+    <div class="cfg"><label for="cfgHours">Hours per lecture<small>Length of one lecture</small></label><input type="number" id="cfgHours" min="0.25" max="12" step="0.25" inputmode="decimal"></div>
+    <div class="cfg"><label for="cfgLeft">Lectures left<small>Change it any time</small></label><input type="number" id="cfgLeft" min="0" step="1" inputmode="numeric"></div>
+    <div class="label" id="cfgSum" style="text-align:left;margin-top:4px"></div>
+    <h2 style="margin-top:18px">Watching speed</h2>
+    <div class="themebtns" style="grid-template-columns:repeat(3,minmax(0,1fr))"><button type="button" id="spd1">1x</button><button type="button" id="spd125">1.25x</button><button type="button" id="spd15">1.5x</button></div>
+    <h2 style="margin-top:18px">Look</h2>
+    <div class="themebtns"><button type="button" id="thNeon">Neon Blue</button><button type="button" id="thFire">Neon Fire</button></div>
+  </section>
+
+  <div class="foot">
+    <span id="footTotal">Saved on this device. Total: 890 lectures × 2 h = 1,780 h.</span>
+    <button class="link" id="reset">Reset all progress</button>
+  </div>
+</main>
+
+<main class="view" id="focus" hidden>
+  <div class="kick">DYNAMIC FOCUS DASHBOARD</div>
+
+  <section class="panel">
+    <h2>Do this now</h2>
+    <div class="fdo" id="dnT"></div>
+    <div class="fbody" id="dnS"></div>
+    <div class="fbody" id="dnTag" style="margin-top:8px"></div>
+    <div class="dnc" id="dnC"></div>
+    <div class="dnbtns" id="dnBtns"><button class="cta" id="fFinish" type="button">Done</button><button class="ghost" id="fSkip" type="button">Skip</button></div>
+    <div class="dnnext" id="dnNext"></div>
+    <div class="setrow" style="margin-top:16px"><div class="setbox" style="grid-column:1/3"><span>LECTURES WATCHED TODAY</span><div class="setctl"><button class="step mini" id="lDec" type="button" aria-label="One lecture less">−</button><output id="lVal">0</output><button class="step mini" id="lInc" type="button" aria-label="One lecture more">+</button></div></div></div>
+    <div class="setrow" style="margin-top:10px"><div class="setbox" style="grid-column:1/3"><span>LECTURES WITHOUT NOTES</span><div class="setctl"><button class="step mini" id="nDec" type="button" aria-label="One note less">−</button><output id="nVal">0</output><button class="step mini" id="nInc" type="button" aria-label="One note more">+</button></div></div></div>
+    <div class="fbody" id="dnFoot" style="margin-top:12px"></div>
+    <button class="link" id="fEnd" type="button" style="margin-top:8px">Good night (end today)</button>
+  </section>
+
+  <section class="panel">
+    <h2>Progress check</h2>
+    <div class="fbody" id="pgBody"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Waking-day status</h2>
+    <div class="fbig" id="fHours">0m</div>
+    <div class="fsub">left until bed</div>
+    <div class="fbody" id="fWoke"></div>
+    <div class="ftrack"><i id="fBar"></i></div>
+    <div class="setrow">
+      <div class="setbox"><span>YOU STARTED</span><div class="setctl"><output id="wVal"></output></div></div>
+      <div class="setbox"><span>BEDTIME</span><div class="setctl">
+        <button class="step mini" id="bDec" type="button" aria-label="Bedtime 30 minutes earlier">−</button><output id="bVal"></output><button class="step mini" id="bInc" type="button" aria-label="Bedtime 30 minutes later">+</button></div></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Live target adapter</h2>
+    <div class="stats three">
+      <div class="stat"><b id="fRemH">0</b><span>to study today</span></div>
+      <div class="stat"><b id="fRemL">0</b><span>lectures left</span></div>
+      <div class="stat"><b id="fDone">0</b><span>done today</span></div>
+    </div>
+    <div class="fbody" id="fLine1"></div>
+    <div class="fbody" id="fLine2" style="margin-top:6px"></div>
+    <div class="status" id="fStatus"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Exam plan</h2>
+    <div class="fbody" id="pCheck"></div>
+    <div class="fbody" id="pRec" style="margin-top:8px"></div>
+    <table style="margin-top:12px"><thead><tr><th>Speed</th><th id="pH1">By finish</th><th>By exam</th></tr></thead><tbody id="pTable"></tbody></table>
+    <div class="hint" style="margin:8px 0 0">Watching time per day.</div>
+    <h2 style="margin-top:20px">Simple rules</h2>
+    <div class="fbody"><b class="p">1.</b> <b>Biology first.</b> It is half of NEET marks.<br>
+      <b class="p">2.</b> <b>Watch, don't copy.</b> Solve questions instead of writing long notes.<br>
+      <b class="p">3.</b> <b>If you must cut:</b> repeat and recap lectures first. Never cut NCERT Biology.<br>
+      <b class="p">4.</b> <b>Never skip 2 days in a row.</b><br>
+      <b class="p">5.</b> <b>Late?</b> Press Done when you really finish. The plan moves on. Missed lectures go to backlog.<br>
+      <b class="p">6.</b> Use one evening a week only for backlog.</div>
+    <h2 style="margin-top:20px">Catch-up planner</h2>
+    <div class="hint" style="margin:-6px 0 12px">Skipped some days? Set it here. The plan updates.</div>
+    <div class="setrow">
+      <div class="setbox"><span>DAYS SKIPPED</span><div class="setctl"><button class="step mini" type="button" data-sk="days" data-d="-1" aria-label="One day less">−</button><output id="skD">0</output><button class="step mini" type="button" data-sk="days" data-d="1" aria-label="One day more">+</button></div></div>
+      <div class="setbox"><span>HOURS MISSED</span><div class="setctl"><button class="step mini" type="button" data-sk="hours" data-d="-0.5" aria-label="30 minutes less">−</button><output id="skH">0m</output><button class="step mini" type="button" data-sk="hours" data-d="0.5" aria-label="30 minutes more">+</button></div></div>
+    </div>
+    <div class="setrow" style="margin-top:12px">
+      <div class="setbox"><span>CATCH UP IN</span><div class="setctl"><button class="step mini" type="button" data-sk="win" data-d="-1" aria-label="Fewer days">−</button><output id="skW">7 days</output><button class="step mini" type="button" data-sk="win" data-d="1" aria-label="More days">+</button></div></div>
+      <div class="setbox"><span>SPEED</span><div class="setctl"><button class="step mini" type="button" data-sk="sp" data-d="-1" aria-label="Slower">−</button><output id="skS">1x</output><button class="step mini" type="button" data-sk="sp" data-d="1" aria-label="Faster">+</button></div></div>
+    </div>
+    <div class="fbody" id="pPlan" style="margin-top:14px"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Today's schedule</h2>
+    <div class="hint">Everything left today, in order. It updates when you press Done.</div>
+    <div class="blocks" id="fBlocks"></div>
+    <div class="fsum" id="fSum"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Full timetable</h2>
+    <div class="fbody" id="ftBody"></div>
+  </section>
+
+  <button class="cta" id="fTimer" type="button">Start Focus Timer</button>
+  <div class="live" id="fLive" hidden>Logging study time live…</div>
+  <button class="ghost" id="fBack" type="button">Back to Overview</button>
+</main>
+
+<script>
+(function(){
+  Array.prototype.forEach.call(document.querySelectorAll(".panel,.stat,.step"), function(el){
+    var r = document.createElement("span"); r.className = "ring"; r.setAttribute("aria-hidden","true");
+    r.appendChild(document.createElement("i")); el.appendChild(r);
+  });
+  var TARGET = new Date(2027, 4, 2, 0, 0, 0).getTime(); // 2 May 2027, local time
+  var TOTAL_LECTURES = 890, HOURS_PER = 2, MAX_PACE = 10, KEY = "neet2027-tracker-v1";
+  var $ = function(id){ return document.getElementById(id); };
+
+  function dayKey(){
+    var d = new Date();
+    return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+  }
+
+  var state = { notes: null, sleepMs: 0, completed: 0, log: {}, focus: {}, plan: {}, settings: { wake: 540, bed: 1320 }, cfg: { total: 890, hours: 2 }, journey: { started: false }, dayStart: null };
+  try {
+    var saved = JSON.parse(localStorage.getItem(KEY));
+    if (saved && typeof saved.completed === "number") {
+      if (saved.cfg && saved.cfg.total >= 1 && saved.cfg.hours > 0) { state.cfg = saved.cfg; TOTAL_LECTURES = saved.cfg.total; HOURS_PER = saved.cfg.hours; }
+      state.completed = Math.min(TOTAL_LECTURES, Math.max(0, saved.completed));
+      state.log = saved.log || {};
+      state.focus = saved.focus || {};
+      state.plan = saved.plan || {};
+      if (saved.skip && typeof saved.skip.days === "number") { state.skip = saved.skip; if (!state.skip.v4) { state.skip.sp = 1; state.skip.v4 = true; } }
+      if (typeof saved.notes === "number") state.notes = saved.notes;
+      if (saved.sleepMs) state.sleepMs = saved.sleepMs;
+      if (saved.flow && saved.flow.day) state.flow = saved.flow;
+      if (saved.journey && saved.journey.started) state.journey = saved.journey;
+      if (saved.dayStart && saved.dayStart.day) state.dayStart = saved.dayStart;
+      if (saved.settings && typeof saved.settings.wake === "number" && typeof saved.settings.bed === "number") state.settings = saved.settings;
+    }
+  } catch(e) {}
+
+  if (state.notes === null) state.notes = (state.log[dayKey()] || 0);   // first run: lectures already watched today still need notes
+  function save(){
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
+  }
+  // A day starts only when you press Start NEET. It is saved, so reopening the app never resets it.
+  function startedToday(){ return !!(state.dayStart && state.dayStart.day === dayKey()); }
+  function dayOver(){ return !!(state.dayStart && state.dayStart.day === dayKey() && state.dayStart.over); }
+  function canStartNow(){
+    if (startedToday()) return false;
+    var ds = state.dayStart; if (!ds) return true;
+    var n = new Date(), nm = n.getHours() * 60 + n.getMinutes(), now = Date.now();
+    if (ds.over && state.sleepMs && state.sleepMs >= ds.ms) return now - state.sleepMs >= 3 * 3600000;   // you slept: button is back once you have been asleep 3 h
+    return nm >= 240 || now - ds.ms >= 16 * 3600000;                                                   // forgot Good night: back from 4:00 AM
+  }
+  function wakeMin(){
+    return startedToday() ? state.dayStart.min : (new Date().getHours() * 60 + new Date().getMinutes());
+  }
+
+  function setToday(n){
+    n = Math.max(0, Math.floor(Number(n) || 0));
+    var key = dayKey();
+    var prev = state.log[key] || 0;
+    var room = TOTAL_LECTURES - (state.completed - prev); // cap so total never exceeds 890
+    n = Math.min(n, room);
+    state.completed = state.completed - prev + n;
+    state.log[key] = n;
+    save();
+    renderTracker();
+  }
+
+  function fmt(n, d){ return n.toLocaleString("en-IN", {minimumFractionDigits:d||0, maximumFractionDigits:d||0}); }
+
+  function remainingHours(){ return (TOTAL_LECTURES - state.completed) * HOURS_PER; }
+  function daysLeft(){ return Math.max(0, Math.ceil((TARGET - Date.now()) / 86400000)); }
+  // ONE plan used by every screen: finish all lectures 30 days before the exam, then revise.
+  function planNow(){
+    var lt = state.log[dayKey()] || 0, H = HOURS_PER, days = daysLeft();
+    var R0 = (TOTAL_LECTURES - state.completed + lt) * H;                    // hours of lectures left at the start of today
+    var dF = Math.ceil((TARGET - 30 * 86400000 - Date.now()) / 86400000);
+    if (dF < 1 || dF > days) dF = Math.max(days, 1);                         // inside the last 30 days: use exam day
+    var spd = (state.skip && state.skip.sp) || 1, fin = new Date(TARGET - (days - dF) * 86400000);
+    return { R0: R0, days: days, dF: dF, fin: fin, finShort: fin.toLocaleDateString("en-IN", { day: "numeric", month: "short" }),
+             spd: spd, perH: R0 / dF, perL: R0 / dF / H, watch: R0 / dF / spd };
+  }
+  // Latest time you can start your day and still fit a day's lectures before bedtime.
+  function startBy(P, extraL, spd){
+    var sp = spd || P.spd, lm = Math.round(HOURS_PER * 60 / sp), need = (P.perL + (extraL || 0)) * (lm + 10) + 100 + 45 + 30;
+    var start = Math.floor(state.settings.bed - need);   // round down to a whole minute
+    return { need: need, start: start, ok: start >= 240 };
+  }
+
+  function renderClock(){
+    var ms = Math.max(0, TARGET - Date.now());
+    var totalSec = Math.floor(ms / 1000);
+    var h = Math.floor(totalSec / 3600), m = Math.floor((totalSec % 3600) / 60), s = totalSec % 60;
+    $("hours").textContent = fmt(h);
+    $("clock").textContent = String(m).padStart(2,"0") + " min · " + String(s).padStart(2,"0") + " sec";
+    $("daysMeta").textContent = ms === 0 ? "Exam day is here. Good luck!" : daysLeft() + " days left, counting today";
+  }
+
+  function renderTracker(){
+    var remL = TOTAL_LECTURES - state.completed, remH = remainingHours();
+    var hpl = fmt(HOURS_PER, HOURS_PER % 1 ? 2 : 0), totH = TOTAL_LECTURES * HOURS_PER;
+    var jr = state.journey.started, dn = 1, sdn = startedToday();
+    if (jr && state.cfg.start) { var p1 = state.cfg.start.split("-"), p2 = dayKey().split("-"); dn = Math.round((Date.UTC(+p2[0], +p2[1]-1, +p2[2]) - Date.UTC(+p1[0], +p1[1]-1, +p1[2])) / 86400000) + 1; }
+    if (sdn) {
+      $("startTxt").innerHTML = "<b>Day " + dn + "</b> · started <b>" + fmtClock(state.dayStart.min) + "</b> · bed <b>" + fmtClock(state.settings.bed) + "</b>." + (dayOver() ? "<br>Good night. A new Start NEET appears tomorrow." : "<br>Exam: <b>2 May 2027</b>. Open <b>Now</b> for your next step.");
+      $("startBtn").style.display = "none";
+    } else if (canStartNow()) {
+      $("startTxt").innerHTML = jr ? "<b>New day.</b> Press <b>Start NEET</b> when you are up and ready. Your plan starts from that moment." : "Not started yet. Press <b>Start NEET</b> when you are ready. Day 1 starts that moment.";
+      $("startBtn").style.display = "";
+    } else {
+      $("startTxt").innerHTML = "Good night. The <b>Start NEET</b> button comes back when you wake up. Press it whenever you are up.";
+      $("startBtn").style.display = "none";
+    }
+    $("lblToday").textContent = "Lectures watched today (" + hpl + " h each)";
+    $("footTotal").textContent = "Saved on this device. Total: " + fmt(TOTAL_LECTURES) + " lectures × " + hpl + " h = " + fmt(totH, totH % 1 ? 1 : 0) + " h.";
+    $("cfgSum").textContent = fmt(remL) + " lectures left = " + fmt(remH, remH % 1 ? 1 : 0) + " h of watching.";
+    if (document.activeElement !== $("cfgTotal")) $("cfgTotal").value = TOTAL_LECTURES;
+    if (document.activeElement !== $("cfgHours")) $("cfgHours").value = HOURS_PER;
+    if (document.activeElement !== $("cfgLeft")) $("cfgLeft").value = remL;
+    var today = state.log[dayKey()] || 0;
+    $("remLec").textContent = fmt(remL);
+    $("remHrs").textContent = fmt(remH, remH % 1 ? 1 : 0);
+    $("dLeft").textContent = fmt(daysLeft());
+    var pct = Math.round(state.completed / TOTAL_LECTURES * 100);
+    $("pct").textContent = pct + "%";
+    $("barFill").style.width = (state.completed / TOTAL_LECTURES * 100) + "%";
+    if (document.activeElement !== $("today")) $("today").value = today;
+    $("todayHrs").textContent = fmt(today * HOURS_PER) + (today * HOURS_PER === 1 ? " hour" : " hours") + " logged today";
+
+    var PN = planNow(), days = PN.days;
+    $("pace").textContent = fmt(PN.perL, 1);
+    var sb = startBy(PN, 0), st = $("status");
+    $("paceLec").innerHTML = remH === 0 ? "" : "= <b>" + hm(PN.watch) + "</b> a day at " + PN.spd + "x.<br>Finish all lectures by <b>" + PN.finShort + "</b> (" + PN.dF + " days), then revise until the exam.";
+    if (remH === 0) {
+      st.className = "status"; st.textContent = "All lectures finished. Use the remaining time to revise.";
+    } else if (PN.watch > MAX_PACE || !sb.ok) {
+      st.className = "status warn";
+      var s15 = startBy(PN, 0, 1.5);
+      st.textContent = "Too heavy for one day at " + PN.spd + "x" + (PN.spd < 1.5 && s15.ok && PN.perH / 1.5 <= MAX_PACE ? ". Use 1.5x: start by " + fmtClock(s15.start) + "." : ". Watch faster or sleep later.");
+    } else {
+      st.className = "status"; st.textContent = "On track if you start your day by " + fmtClock(sb.start) + " (bed " + fmtClock(state.settings.bed) + ").";
+    }
+    var rows = [1, 1.25, 1.5].map(function(sp){
+      var h = remH / sp, perDay = PN.R0 / sp / PN.dF;
+      return "<tr><td>" + sp + "x</td><td>" + fmt(h,1) + " h</td><td class='" + (perDay > MAX_PACE ? "hot" : "") + "'>" +
+             hm(perDay) + "</td><td>" + (sp === 1 ? "–" : fmt(remH - h,1) + " h") + "</td></tr>";
+    });
+    $("speedBody").innerHTML = rows.join("");
+    $("spHint").innerHTML = "Hours a day to finish by <b>" + PN.finShort + "</b>.";
+    ["spd1","spd125","spd15"].forEach(function(id, i){ $(id).className = [1,1.25,1.5][i] === PN.spd ? "on" : ""; });
+
+    // lecture history: your daily log stays here forever
+    var hk = Object.keys(state.log).filter(function(k){ return state.log[k] > 0 || k === dayKey(); }).sort().reverse().slice(0, 14), hr = "";
+    hk.forEach(function(k){
+      var q = k.split("-"), d = new Date(+q[0], +q[1] - 1, +q[2]);
+      hr += "<tr><td>" + d.toLocaleDateString("en-IN", { weekday: "short", day: "numeric", month: "short" }) + (k === dayKey() ? " (today)" : "") + "</td><td>" + state.log[k] + "</td><td>" + hm(state.log[k] * HOURS_PER) + "</td></tr>";
+    });
+    $("histBody").innerHTML = hr;
+    $("histSum").innerHTML = "Watched so far: <b>" + state.completed + "</b> of " + TOTAL_LECTURES + ". Plan: <b>" + fmt(PN.perL, 1) + "</b> a day. Only the <i>today</i> counter starts at 0 each midnight; your total is never lost.";
+  }
+
+  $("inc").addEventListener("click", function(){ setToday((state.log[dayKey()] || 0) + 1); });
+  $("dec").addEventListener("click", function(){ setToday((state.log[dayKey()] || 0) - 1); });
+  $("today").addEventListener("change", function(e){ setToday(e.target.value); });
+  $("today").addEventListener("blur", renderTracker);
+  $("reset").addEventListener("click", function(){
+    if (confirm("Reset all logged lectures? This cannot be undone.")) {
+      state.cfg.start = null; state = { completed: 0, log: {}, focus: {}, plan: {}, settings: state.settings, cfg: state.cfg, journey: { started: false }, dayStart: null }; save(); renderTracker(); renderFocus(true);
+    }
+  });
+
+
+  /* ===== Dynamic Focus ===== */
+  var TYPES = [
+    { k: "study",    l: "Study Lecture",                 i: "📚", c: "var(--cyan)" },
+    { k: "revision", l: "Revision / Question Practice",  i: "✍️", c: "var(--pink)" },
+    { k: "break",    l: "Break / Meal",                  i: "☕",       c: "var(--ok)" }
+  ];
+  var PATTERN = ["study", "study", "revision", "break"];
+  var timer = { on: false, start: 0, base: 0, lastSave: 0 };
+  var blocksSig = "";
+
+  function pad2(n){ return String(n).padStart(2, "0"); }
+  function fmtClock(min){
+    var m = ((min % 1440) + 1440) % 1440, h = Math.floor(m / 60), mm = m % 60;
+    return (h % 12 === 0 ? 12 : h % 12) + ":" + pad2(mm) + " " + (h >= 12 ? "PM" : "AM");
+  }
+  function fmtTimer(sec){
+    return pad2(Math.floor(sec / 3600)) + ":" + pad2(Math.floor((sec % 3600) / 60)) + ":" + pad2(Math.floor(sec % 60));
+  }
+  // Hours left in today's waking window [wake, bed]. Handles bedtimes past midnight,
+  // and being up before your planned wake time (you're clearly awake if you're using the app).
+  function hoursUntilBed(now, wake, bed){
+    var t = now.getHours() * 60 + now.getMinutes() + now.getSeconds() / 60;
+    var W = wake, B = bed > wake ? bed : bed + 1440;           // today's window [W, B]
+    if (t >= W && t <= B) return (B - t) / 60;                  // inside today's window
+    if (t >= W - 1440 && t <= B - 1440) return (B - 1440 - t) / 60; // inside yesterday's window (after midnight)
+    if (t < W) {                                                // gap before today's wake time
+      var mid = ((B - 1440) + W) / 2;
+      return t >= mid ? (B - t) / 60 : 0;                       // closer to wake-up => you're up early
+    }
+    var mid2 = (B + W + 1440) / 2;                              // gap after bedtime
+    return t >= mid2 ? (B + 1440 - t) / 60 : 0;
+  }
+  // hours -> "9h 12m"
+  function hm(h){
+    var m = Math.max(0, Math.round(h * 60)), hh = Math.floor(m / 60), mm = m % 60;
+    return hh ? hh + "h" + (mm ? " " + mm + "m" : "") : mm + "m";
+  }
+  function focusToday(){ return state.focus[dayKey()] || 0; }
+
+
+
+  /* ===== Progress coach: finds your backlog from your own daily log ===== */
+  function dnum(y, m, d){ return Date.UTC(y, m, d) / 86400000; }
+  function keyNum(k){ var p = k.split("-"); return dnum(+p[0], +p[1] - 1, +p[2]); }
+  function coach(){
+    var c = state.cfg, k = dayKey(), lt = state.log[k] || 0;
+    if (!state.journey.started) c = { start: k, c0: state.completed - lt };
+    else if (!c.start) { c.start = k; c.c0 = state.completed - lt; save(); }
+    var n = new Date(), todayN = keyNum(k), startN = keyNum(c.start);
+    var fd = new Date(TARGET - 30 * 86400000), finN = dnum(fd.getFullYear(), fd.getMonth(), fd.getDate());
+    if (finN - todayN < 1) finN = dnum(new Date(TARGET).getFullYear(), new Date(TARGET).getMonth(), new Date(TARGET).getDate());
+    var span = Math.max(1, finN - startN), rate = Math.max(0, (TOTAL_LECTURES - c.c0) / span);
+    var expected = Math.min(TOTAL_LECTURES, c.c0 + rate * Math.max(0, todayN - startN));
+    var behind = expected - (state.completed - lt);
+    var y = new Date(n.getFullYear(), n.getMonth(), n.getDate() - 1);
+    var yk = y.getFullYear() + "-" + pad2(y.getMonth() + 1) + "-" + pad2(y.getDate());
+    return { rate: rate, behind: behind, yday: state.log[yk] || 0, hasHistory: todayN > startN, yKnown: keyNum(yk) >= startN };
+  }
+  function backlogHours(R0, days){
+    var sk = state.skip || { days: 0, hours: null };
+    var B = sk.hours !== null && sk.hours !== undefined ? sk.hours : sk.days > 0 ? sk.days * (R0 / planNow().dF) : Math.max(0, coach().behind) * HOURS_PER;
+    return Math.min(Math.max(B, 0), R0);
+  }
+  function lecCount(plan){ return plan.filter(function(g){ return g.k === "lec"; }).length; }
+  // Try the normal day first. If it cannot fit today's target, squeeze it (shorter breaks, then faster speed).
+  function makePlan(fl, c0, lecTarget, lecToday){
+    var L1 = c0.lecMin;
+    var tries = [
+      { brk: 10, meal: [20, 40, 40], rev: 45, wd: 30, lecMin: L1, tag: "" },
+      { brk: 5,  meal: [15, 30, 30], rev: 30, wd: 20, lecMin: L1, tag: "Tight day: short breaks and short meals." }
+    ], need = Math.max(0, lecTarget - lecToday), best = null;
+    for (var i = 0; i < tries.length; i++) {
+      var cx = {}; for (var k in c0) cx[k] = c0[k]; for (var k2 in tries[i]) cx[k2] = tries[i][k2];
+      var pl = buildPlan(fl, cx), P = lecCount(pl);
+      if (best === null || P > best.P) best = { plan: pl, ctx: cx, P: P };
+      if (P >= need) { best = { plan: pl, ctx: cx, P: P }; break; }
+    }
+    return best;
+  }
+
+  function startJourney(){
+    var k = dayKey(), n = new Date();
+    if (startedToday() || !canStartNow()) return;
+    if (!state.journey.started) {
+      state.journey = { started: true, ms: Date.now() };
+      state.cfg.start = k; state.cfg.c0 = state.completed - (state.log[k] || 0);
+    }
+    state.dayStart = { day: k, min: n.getHours() * 60 + n.getMinutes(), ms: Date.now(), over: false };
+    state.flow = null; save(); showView("focus");
+  }
+  function endDay(){
+    if (!startedToday() || dayOver()) return;
+    if (!confirm("Good night? This ends today's plan. A new Start NEET button appears tomorrow.")) return;
+    state.dayStart.over = true; state.sleepMs = Date.now(); save(); renderTracker(); renderFocus(true);
+  }
+  /* ===== Guided day: one task at a time ===== */
+  var curTask = null;
+  function flowGet(){
+    var k = dayKey(), f = state.flow;
+    if (!f || f.day !== k) { var ds = state.dayStart, hs = (ds && ds.day === k) ? ds.min / 60 : 0; f = state.flow = { day: k, pos: 0, b: hs >= 11.5, l: hs >= 15.5, d: false, r: false, jm: false, cur: Date.now(), miss: 0 }; save(); }
+    return f;
+  }
+  function buildPlan(f, c){
+    var P = ["lec","brk","lec","brk","rev","brk","lec","brk"];
+    if (c.cuCount > 0) P.push("cu","brk");
+    if (c.cuCount > 1) P.push("cu","brk");
+    var owed = Math.max(0, state.notes || 0), revN = f.rn || 0, bn = f.bn || 0, pendQ = 0, noteMax = Math.floor(c.rev / 15);
+    var plan = [], t = f.cur, pos = f.pos, mb = f.b, ml = f.l, md = f.d, mr = f.r, jm = !!f.jm, lec = c.lecDone;
+    var planEnd = c.endMs - c.wd * 60000;
+    while (plan.length < 40) {
+      var d = new Date(t), mins = d.getHours() * 60 + d.getMinutes(), hr = mins / 60, since = mins - c.wake, task = null;
+      var rem = (planEnd - t) / 60000;
+      if (rem < 10) break;
+      if (!mr && c.wake < 720 && since >= 0 && since < 30) { task = { k: "routine", t: "Wake-up routine", s: "Drink water. Wash face. No phone.", m: 15, f: "r" }; mr = true; jm = false; }
+      else if (!mb && hr >= c.wake / 60 - 1.5 && hr < 11.5) { task = { k: "meal", t: "Eat breakfast", s: "Eat, then start right away.", m: c.meal[0], f: "b" }; mb = true; jm = true; }
+      else if (!ml && hr >= 13 && hr < 17) { task = { k: "meal", t: "Eat lunch", s: "Eat and rest a little.", m: c.meal[1], f: "l" }; ml = true; jm = true; }
+      else if (!md && hr >= 19.5 && hr < 22.5) { task = { k: "meal", t: "Eat dinner", s: "Eat and relax.", m: c.meal[2], f: "d" }; md = true; jm = true; }
+      else {
+        var it = pendQ > 0 ? "q" : P[pos % P.length]; if (it !== "q") pos++;
+        var wantNote = it === "brk" && owed > 0 && !bn;
+        if (jm && it === "brk" && !wantNote) { it = P[pos % P.length]; pos++; }          // a meal already counts as a break
+        if (!wantNote) jm = false;
+        if (it === "q") { task = { k: "rev", t: "Questions", s: "Solve questions from what you watched.", m: pendQ }; pendQ = 0; }
+        else if (it === "rev" && owed > 0 && revN < noteMax) {
+          owed--; revN++;
+          task = { k: "note", t: "Notes: formulas + key points", s: "15 min. Write formulas and key points from one lecture you watched. Then Done.", m: 15, n: 1 };
+          if (owed > 0 && revN < noteMax) pos--;                            // stay on this block for the next note
+          else { pendQ = Math.max(0, c.rev - 15 * revN); revN = 0; }        // the rest of the revision block stays as questions
+        } else if (it === "brk" && owed > 0 && !bn) {
+          owed--; bn = 1; pos--;                                            // note first (while it is fresh), then the break
+          task = { k: "note", t: "Notes: formulas + key points", s: "15 min. Write formulas and key points from one lecture you watched. Then Done.", m: 15, n: 1, src: "b" };
+        } else if (it === "lec" || it === "cu") {
+          lec++;
+          task = { k: "lec", t: (it === "cu" ? "Catch-up lecture " : lec > c.lecTarget ? "Extra lecture " : "Lecture ") + lec, s: "Full focus. Phone away.", m: c.lecMin };
+        } else if (it === "rev") { revN = 0; task = { k: "rev", t: "Revision + questions", s: "Solve questions from what you watched.", m: c.rev }; }
+        else { bn = 0; task = { k: "brk", t: "Short break", s: "Water, stretch. No scrolling.", m: c.brk }; }
+      }
+      if (task.m > rem) {
+        if (rem < 20) break;
+        if (task.k === "lec") { lec--; task = { k: "rev", t: "Questions (short)", s: "Last block before wind-down.", m: Math.floor(rem) }; }
+        else task.m = Math.floor(rem);
+      }
+      task.start = t; task.end = t + task.m * 60000; task.pa = pos;
+      plan.push(task);
+      t = task.end;
+      if (plan.length === 1) t = Math.max(t, c.now);                      // running late? the rest shifts
+    }
+    var ws = Math.max(t, c.now), we = Math.max(c.endMs, ws + 5 * 60000);   // wind-down always runs right up to bedtime
+    while (owed > 0 && !bn && we - ws >= 25 * 60000 && plan.length < 40) {   // leftover notes use the quiet time before bed
+      owed--; plan.push({ k: "note", t: "Notes: formulas + key points", s: "15 min. Write formulas and key points from one lecture you watched. Then Done.", m: 15, n: 1, src: "w", start: ws, end: ws + 900000, pa: pos });
+      ws += 900000;
+    }
+    plan.push({ k: "end", t: "Wind-down", s: "Plan tomorrow. Pack your bag. Sleep on time.", m: Math.max(1, Math.round((we - ws) / 60000)), start: ws, end: we, pa: pos });
+    return plan;
+  }
+  function finishTask(skip){
+    if (!startedToday()) { startJourney(); return; }
+    var t = curTask; if (!t || t.k === "end") return;
+    var f = flowGet();
+    if (t.f) { f[t.f] = true; f.jm = t.f !== "r"; }
+    else { f.pos = t.pa; f.jm = false; }
+    if (t.k === "note") { state.notes = Math.max(0, (state.notes || 0) - 1); if (t.src === "b") f.bn = 1; else f.rn = (f.rn || 0) + 1; }
+    else { if (t.k !== "lec") f.rn = 0; f.bn = 0; }
+    if (t.k === "lec") { if (skip) f.miss = (f.miss || 0) + 1; else { state.notes = (state.notes || 0) + 1; setToday((state.log[dayKey()] || 0) + 1); } }
+    f.cur = Date.now(); save(); renderFocus(true);
+  }
+  var KCOL = { note: "var(--violet)", lec: "var(--cyan)", rev: "var(--pink)", brk: "var(--ok)", meal: "var(--ok)", routine: "var(--violet)", end: "var(--violet)" };
+
+  function renderFocus(force){
+    if ($("focus").hidden && !force) return;
+    var now = new Date(), st = state.settings, W = wakeMin();
+    var left = dayOver() ? 0 : hoursUntilBed(now, W, st.bed);
+
+    // 1. waking-day status
+    var lm = Math.max(0, Math.round(left * 60));
+    $("fHours").innerHTML = Math.floor(lm / 60) + "<small>h</small> " + (lm % 60) + "<small>m</small>";
+    var nowM = now.getHours() * 60 + now.getMinutes();
+    var early = left > 0 && st.bed > W && nowM < W;
+    $("fWoke").innerHTML = (early ? "Up early. Day starts at <b class='p'>" : "Day started at <b class='p'>") + fmtClock(W) + "</b>" +
+      (left > 0 ? ". Bed at <b>" + fmtClock(st.bed) + "</b>." : ". Bedtime is over. Rest now.");
+    var awake = ((((st.bed - W) % 1440) + 1440) % 1440) / 60 || 24;
+    $("fBar").style.width = Math.min(100, Math.max(0, (1 - left / awake) * 100)) + "%";
+    $("wVal").textContent = startedToday() ? fmtClock(W) : "Not yet";
+    $("bVal").textContent = fmtClock(st.bed);
+
+    // 2. live target adapter
+    var days = daysLeft(), lecToday = state.log[dayKey()] || 0;
+    var dailyTarget = days > 0 ? (remainingHours() + lecToday * HOURS_PER) / days : remainingHours();
+    var done = lecToday * HOURS_PER;
+    var remT = Math.max(0, dailyTarget - done), lecLeft = remT / HOURS_PER;
+    $("fRemH").textContent = hm(remT);
+    $("fRemL").textContent = fmt(lecLeft, 1);
+    $("fDone").textContent = hm(done);
+    var tight = false, ok = true;
+    if (remT <= 0) {
+      $("fLine1").textContent = "Today's target is done. Revise now!";
+      $("fLine2").textContent = "";
+    } else if (left <= 0) {
+      $("fLine1").textContent = hm(remT) + " moves to tomorrow.";
+      $("fLine2").textContent = ""; ok = false;
+    } else {
+      var pace = remT / left, gap = left / lecLeft - HOURS_PER;
+      $("fLine1").innerHTML = "Study <b>" + hm(remT) + "</b> more (" + fmt(lecLeft, 1) + " lectures).";
+      $("fLine2").innerHTML = (gap >= 0
+        ? "Start a lecture every <b class='p'>" + hm(left / lecLeft) + "</b>."
+        : "Not enough time for full 2h lectures. Sleep later or cut a break.") +
+        "<br>Study <b>" + Math.min(Math.round(pace * 60), 60) + " min</b> of every hour.";
+      tight = pace > 0.85;
+    }
+    var fs = $("fStatus");
+    fs.className = "status" + (tight || !ok ? " warn" : "");
+    fs.textContent = remT <= 0 ? "All done for today."
+      : !ok ? "No time left today."
+      : tight ? "Very tight. Cut breaks or sleep later."
+      : "Good pace. You have time for breaks.";
+
+    // 3. guided day: current task + schedule
+    function clockOf(ms){ var d = new Date(ms); return fmtClock(d.getHours() * 60 + d.getMinutes()); }
+    var PN = planNow(), R0x = remainingHours() + lecToday * HOURS_PER, spd = PN.spd;
+    var skx = state.skip || { days: 0, hours: null, win: 7 };
+    var Bx = backlogHours(R0x, days);
+    var winX = Math.max(1, Math.min(skx.win || 7, PN.dF));
+    var cuCount = Bx > 0.01 ? Math.min(2, Math.max(1, Math.round(Bx / winX / HOURS_PER))) : 0;
+    var lecTarget = Math.max(0, Math.ceil(((R0x - Bx) / PN.dF + Bx / winX) / HOURS_PER - 1e-9));
+    var ctx0 = { now: now.getTime(), endMs: now.getTime() + left * 3600000, lecMin: Math.round(HOURS_PER * 60 / spd), lecTarget: lecTarget, lecDone: lecToday, wake: W, cuCount: cuCount };
+    var fl = flowGet(), plan = [], ctx = ctx0, tag = "";
+    if (left > 0) {
+      var mp = makePlan(fl, ctx0, lecTarget, lecToday);
+      if (mp.plan.length && mp.plan[0].k !== "end" && ctx0.now - fl.cur > mp.plan[0].m * 60000 + 3 * 3600000) { fl.cur = ctx0.now; save(); mp = makePlan(fl, ctx0, lecTarget, lecToday); }
+      plan = mp.plan; ctx = mp.ctx; tag = ctx.tag || "";
+    }
+    var lateMin = (now.getHours() * 60 + now.getMinutes()) - W;
+    var lateMsg = (lecToday === 0 && lateMin >= 90 && lateMin < 900 && left > 0) ? "You started late. No problem. The plan is rebuilt for the time you have now." : "";
+    curTask = plan[0] || null;
+    window.__plan = { plan: plan, endMs: ctx.endMs, wd: ctx.wd, left: left, days: days, lecTarget: lecTarget, lecMin: ctx.lecMin };
+    var cur = curTask;
+    if (!cur) {
+      $("dnT").textContent = "Rest now"; $("dnS").innerHTML = "Bedtime is here. Sleep well and start fresh tomorrow.";
+      $("dnC").textContent = ""; $("dnBtns").style.display = "none"; $("dnNext").innerHTML = "";
+    } else {
+      $("dnT").textContent = cur.t;
+      $("dnS").innerHTML = cur.s + (cur.k === "end" ? "" : "<br><b>" + clockOf(cur.start) + " – " + clockOf(cur.end) + "</b>");
+      var remMin = (cur.end - ctx.now) / 60000, dc = $("dnC");
+      if (cur.k === "end") { dc.className = "dnc"; dc.textContent = ""; }
+      else if (remMin >= 0) { dc.className = "dnc"; dc.textContent = (remMin < 1 ? "Less than 1 min left" : hm(Math.ceil(remMin) / 60) + " left"); }
+      else { dc.className = "dnc late"; dc.textContent = "Over by " + hm(Math.ceil(-remMin) / 60) + ". Press Done when you finish."; }
+      $("dnBtns").style.display = cur.k === "end" ? "none" : "grid";
+      $("fSkip").style.display = cur.k === "lec" ? "" : "none";
+      $("dnBtns").style.gridTemplateColumns = cur.k === "lec" ? "minmax(0,2fr) minmax(0,1fr)" : "minmax(0,1fr)";
+      var nx = plan.slice(1, 4).map(function(g){
+        return "<div class='srow' style='--c:" + KCOL[g.k] + "'><span class='st'>" + clockOf(g.start) + "</span><span><b>" + g.t + "</b></span><span class='sd'>" + hm(g.m / 60) + "</span></div>";
+      }).join("");
+      $("dnNext").innerHTML = nx ? "<h3>NEXT</h3>" + nx : "";
+    }
+    $("dnTag").innerHTML = (lateMsg ? "<span style='color:var(--muted)'>" + lateMsg + "</span>" : "") + (tag ? (lateMsg ? "<br>" : "") + "<span style='color:#ff8fa3'>" + tag + "</span>" : "");
+    var started = startedToday();
+    if (!started) {
+      var cs = canStartNow();
+      $("dnT").textContent = cs ? "Ready to begin?" : "Good night";
+      $("dnS").innerHTML = cs ? (state.journey.started ? "New day. Press <b>Start NEET</b> when you are up. Your plan starts from that moment." : "Press <b>Start NEET</b>. Day 1 begins at this moment and your full timetable is made from it.")
+                              : "Sleep well. The <b>Start NEET</b> button comes back when you wake up. Press it when you are up, at any time.";
+      $("dnC").textContent = ""; $("dnTag").innerHTML = ""; $("dnNext").innerHTML = "";
+      $("dnBtns").style.display = cs ? "grid" : "none"; $("dnBtns").style.gridTemplateColumns = "minmax(0,1fr)"; $("fSkip").style.display = "none";
+    }
+    $("fEnd").style.display = (started && !dayOver()) ? "" : "none";
+    $("fFinish").textContent = started ? "Done" : "Start NEET";
+    $("lVal").textContent = lecToday; $("nVal").textContent = state.notes || 0;
+    var P = plan.filter(function(g){ return g.k === "lec"; }).length, need = Math.max(0, lecTarget - lecToday), short = Math.max(0, need - P);
+    $("dnFoot").innerHTML = "Target today: <b>" + lecTarget + "</b> lectures. Done: <b>" + lecToday + "</b>. Planned: <b>" + P + "</b>." +
+      (short > 0 ? "<br><span style='color:#ff8fa3'>Short by " + short + " lecture" + (short > 1 ? "s" : "") + ". It goes to your backlog.</span>"
+                 : need > 0 ? "<br><span style='color:var(--ok)'>You can hit today's target.</span>" : "<br><span style='color:var(--ok)'>Today's target is done.</span>") +
+      (fl.miss ? "<br><span style='color:var(--muted)'>Skipped today: " + fl.miss + "</span>" : "") +
+      ((state.notes || 0) > 0 ? "<br><span style='color:var(--muted)'>Notes to make: " + state.notes + ". 15 min each, inside your revision time. Nothing else moves.</span>" : "");
+
+    var sigS = plan.map(function(g){ return g.k + g.t + Math.round(g.start / 60000) + "," + g.m; }).join("|");
+    if (force || sigS !== blocksSig) {
+      blocksSig = sigS;
+      $("fBlocks").innerHTML = plan.length ? plan.map(function(g, i){
+        return "<div class='srow" + (i === 0 ? " first" : "") + "' style='--c:" + KCOL[g.k] + "'><span class='st'>" + clockOf(g.start) + "</span><span><b>" + g.t + "</b></span><span class='sd'>" + hm(g.m / 60) + "</span></div>";
+      }).join("") : "<div class='fbody'>No hours left before bedtime.</div>";
+    }
+    $("fSum").innerHTML = plan.length ? "Lectures planned: <b>" + P + "</b> · Target: <b>" + lecTarget + "</b>" : "";
+
+
+    // 3c. progress check (auto backlog from the daily log)
+    var co = coach(), bh = co.behind * HOURS_PER, pg = "";
+    if (!co.hasHistory) {
+      pg = "Day 1 of your plan.<br>Start your day by <b>" + (startBy(PN, 0).ok ? fmtClock(startBy(PN, 0).start) : "—") + "</b> to stay on plan.<br>Plan: <b>" + fmt(co.rate, 1) + "</b> lectures a day to finish lectures by <b>" + new Date(TARGET - 30 * 86400000).toLocaleDateString("en-IN", { day: "numeric", month: "short" }) + "</b>.";
+    } else {
+      pg = co.behind > 0.5 ? "<span style='color:#ff8fa3'>Behind by <b>" + fmt(co.behind, 1) + "</b> lectures</span> (" + hm(bh) + ")."
+         : co.behind < -0.5 ? "<span style='color:var(--ok)'>Ahead by <b>" + fmt(-co.behind, 1) + "</b> lectures.</span>"
+         : "<span style='color:var(--ok)'>On track.</span>";
+      if (co.yKnown) pg += "<br>Yesterday: <b>" + co.yday + "</b> lecture" + (co.yday === 1 ? "" : "s") + " (plan: " + fmt(co.rate, 1) + ").";
+      if (co.behind > 0.5) {
+        pg += "<br>Fix: <b>+" + fmt(co.behind / 7, 1) + "</b> lectures a day for 7 days.";
+        var catchDay = Math.max(1, Math.floor(awake * 60 * 0.8 / (Math.round(HOURS_PER * 60 / spd) + 10)));
+        if (co.behind > 3 * co.rate) pg += "<br>Far behind. Take <b>one catch-up day</b> this week: up to <b>" + catchDay + "</b> lectures.";
+      }
+      var sbp = startBy(PN, Math.max(0, co.behind) / 7);
+      pg += "<br>To stay on plan, start your day by <b>" + (sbp.ok ? fmtClock(sbp.start) : "—") + "</b>" + (sbp.ok ? "" : " (not possible at " + PN.spd + "x: use 1.5x or sleep later)") + ".";
+      if (co.yKnown && co.yday === 0) pg += "<br><span style='color:#ff8fa3'>0 lectures yesterday. Never skip 2 days in a row. Start Lecture 1 early today.</span>";
+    }
+    $("pgBody").innerHTML = pg;
+
+    // 3b. exam plan + backlog
+    var R0 = remainingHours() + lecToday * HOURS_PER;
+    var dF = PN.dF, fin = PN.fin;
+    var finShort = fin.toLocaleDateString("en-IN", { day: "numeric", month: "short" });
+    $("pH1").textContent = "By " + finShort;
+    var speeds = [1, 1.25, 1.5], rec = null, rows = "";
+    speeds.forEach(function(sp){
+      var a = R0 / sp / dF, b = R0 / sp / Math.max(days, 1);
+      if (rec === null && a <= MAX_PACE) rec = { sp: sp, h: a };
+      rows += "<tr><td>" + sp + "x</td><td class='" + (a > MAX_PACE ? "hot" : "") + "'>" + hm(a) + "</td><td class='" + (b > MAX_PACE ? "hot" : "") + "'>" + hm(b) + "</td></tr>";
+    });
+    $("pTable").innerHTML = rows;
+    $("pCheck").innerHTML = "Check: <b>" + (TOTAL_LECTURES - state.completed) + "</b> lectures left. Finish by <b>" + finShort + "</b> = <b>" + dF + "</b> days (counting today) = <b>" + fmt(R0 / dF / HOURS_PER, 1) + "</b> lectures a day. That is <b>" + hm(R0 / dF) + "</b> at 1x or <b>" + hm(R0 / dF / spd) + "</b> at " + spd + "x.";
+    if (R0 <= 0) {
+      $("pRec").innerHTML = "All lectures done. Revise and take mock tests.";
+    } else {
+      if (!rec) rec = { sp: 1.5, h: R0 / 1.5 / dF };
+      $("pRec").innerHTML = "Finish lectures by <b class='p'>" + finShort + "</b>. Last " + (days - dF) + " days: revision + mock tests.<br>" +
+        "Best: <b>" + rec.sp + "x</b> speed, <b>" + hm(rec.h) + "</b> a day (" + fmt(rec.h * rec.sp / HOURS_PER, 1) + " lectures).";
+    }
+    var sk = state.skip = state.skip || { days: 0, hours: null, win: 7, sp: 1 };
+    var base1 = R0 / dF;
+    var B = backlogHours(R0, days);
+    var win = Math.max(1, Math.min(sk.win, dF));
+    var N0 = (R0 - B) / dF;                 // normal day once the backlog is cleared (lecture hours)
+    var cap = MAX_PACE * sk.sp - N0;                       // extra lecture-hours per day you can add (max 10 h of watching)
+    var minWin = cap > 0 ? Math.ceil(B / cap) : 0;
+    var effWin = cap > 0 ? Math.min(Math.max(win, minWin), dF) : dF;
+    $("skD").textContent = sk.days + (sk.days === 1 ? " day" : " days");
+    $("skH").textContent = hm(B);
+    $("skW").textContent = effWin + (effWin === 1 ? " day" : " days");
+    $("skS").textContent = sk.sp + "x";
+    if (R0 <= 0) {
+      $("pPlan").innerHTML = "All lectures done. Nothing to catch up.";
+    } else if (B < 0.01) {
+      $("pPlan").innerHTML = "No backlog. Keep your normal day: <b>" + hm(base1 / sk.sp) + "</b> at " + sk.sp + "x.";
+    } else {
+      var watch = (N0 + B / effWin) / sk.sp, normal = N0 / sk.sp, extra = B / effWin / sk.sp;
+      var dl = function(n){ return n + (n === 1 ? " day" : " days"); };
+      var out = "You missed <b class='p'>" + hm(B) + "</b> of lectures (" + fmt(B / HOURS_PER, 1) + " lectures).<br>";
+      if (cap > 0 && effWin > win) {
+        out += "<span style='color:#ff8fa3'>" + dl(win) + " is not possible. A day has 24 h and only about " + fmt(awake, 0) + " h are awake. Max study is " + MAX_PACE + " h a day.<br>Shortest plan: <b>" + dl(effWin) + "</b>.</span><br>";
+      } else if (cap <= 0) {
+        out += "<span style='color:#ff8fa3'>Not possible at " + sk.sp + "x. Pick a faster speed.</span><br>";
+      }
+      out += "Next <b>" + dl(effWin) + "</b>: <b class='p'>" + hm(watch) + "</b> a day at " + sk.sp + "x<br>" +
+        "<span style='color:var(--muted)'>(normal " + hm(normal) + " + catch-up " + hm(extra) + ")</span><br>" +
+        "After that: <b>" + hm(normal) + "</b> a day.<br>";
+      if (watch <= MAX_PACE) out += "<span style='color:var(--ok)'>Doable. Keep 7 h of sleep.</span><br>";
+      out += "<span style='color:var(--muted)'>Or spread it over all " + dF + " days: +" + hm(B / dF / sk.sp) + " a day.<br>Tip: new lecture first, then the old ones.</span>";
+      $("pPlan").innerHTML = out;
+    }
+
+
+    // 3d. full timetable from today to the exam
+    var lecAll = TOTAL_LECTURES - state.completed, perL = lecAll / Math.max(dF, 1), MN = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    var mon = {}, ord = [];
+    for (var di = 0; di < days; di++) {
+      var dd = new Date(now.getFullYear(), now.getMonth(), now.getDate() + di), mk = dd.getFullYear() * 100 + dd.getMonth();
+      if (!mon[mk]) { mon[mk] = { label: MN[dd.getMonth()] + " " + dd.getFullYear(), lec: 0, rev: 0 }; ord.push(mk); }
+      if (di < dF) mon[mk].lec += perL; else mon[mk].rev += 1;
+    }
+    var cumL = state.completed, trs = "";
+    ord.forEach(function(mk){
+      var m = mon[mk]; cumL += m.lec;
+      trs += "<tr><td>" + m.label + "</td><td>" + (m.lec > 0.5 ? "+" + Math.round(m.lec) : "–") + "</td><td>" + Math.min(TOTAL_LECTURES, Math.round(cumL)) + "</td></tr>";
+    });
+    var finS = new Date(TARGET - (days - dF) * 86400000).toLocaleDateString("en-IN", { day: "numeric", month: "short" });
+    $("ftBody").innerHTML =
+      "<b class='p'>Phase 1: Lectures</b><br>Today to <b>" + finS + "</b> (" + dF + " days). About <b>" + fmt(perL, 1) + "</b> lectures a day = <b>" + hm(perL * HOURS_PER / spd) + "</b> at " + spd + "x.<br>" +
+      "<b class='p'>Phase 2: Revision + mocks</b><br>" + finS + " to exam (" + (days - dF) + " days). No new lectures. Revise NCERT Biology, solve past papers, take a full mock test (3h 20m) and review it.<br>" +
+      "<b class='p'>Every day</b><br>Day starts when you first open the app. Lecture, break, lecture, meal, questions. Sleep by <b>" + fmtClock(st.bed) + "</b>.<br>" +
+      "<b class='p'>Every week</b><br>One evening for backlog only.<br>" +
+      "<table style='margin-top:10px'><thead><tr><th>Month</th><th>Lectures</th><th>Total done</th></tr></thead><tbody>" + trs + "</tbody></table>" +
+      "<div class='hint' style='margin:8px 0 0'>Exam date is set to 2 May 2027. Check the official date when it is announced.</div>";
+
+    // 4. timer button
+    var tb = $("fTimer");
+    tb.className = "cta" + (timer.on ? " run" : "");
+    tb.textContent = timer.on ? "Stop · " + fmtTimer((Date.now() - timer.start) / 1000) : "Start Focus Timer";
+    $("fLive").hidden = false; $("fLive").textContent = (timer.on ? "Logging live. " : "") + "Extra focus time today: " + hm(focusToday());
+  }
+
+  function tickFocus(){
+    if (timer.on) {
+      state.focus[dayKey()] = timer.base + (Date.now() - timer.start) / 3600000;
+      if (Date.now() - timer.lastSave > 5000) { timer.lastSave = Date.now(); save(); }
+    }
+    renderFocus(false);
+  }
+
+  function showView(name){
+    $("home").hidden = name !== "home";
+    $("focus").hidden = name !== "focus";
+    window.scrollTo(0, 0);
+    if (name === "focus") renderFocus(true); else renderTracker();
+  }
+
+  $("startBtn").addEventListener("click", startJourney);
+  $("fEnd").addEventListener("click", endDay);
+  $("nowBtn").addEventListener("click", function(){ showView("focus"); });
+  $("focus").addEventListener("click", function(e){
+    var a = e.target.closest("[data-sk]"); if (!a) return;
+    var f = a.getAttribute("data-sk"), d = +a.getAttribute("data-d");
+    var sk = state.skip = state.skip || { days: 0, hours: null, win: 7, sp: 1 };
+    var R0 = remainingHours() + (state.log[dayKey()] || 0) * HOURS_PER, base = R0 / planNow().dF;
+    if (f === "days") { sk.days = Math.max(0, Math.min(60, sk.days + d)); sk.hours = null; }
+    else if (f === "hours") { sk.hours = Math.max(0, (sk.hours === null ? sk.days * base : sk.hours) + d); }
+    else if (f === "win") { sk.win = Math.max(1, Math.min(60, sk.win + d)); }
+    else if (f === "sp") { var L = [1, 1.25, 1.5], i = Math.max(0, Math.min(2, L.indexOf(sk.sp) + (d > 0 ? 1 : -1))); sk.sp = L[i]; }
+    save(); renderFocus(true);
+  });
+  function setTheme(t){
+    if (t === "kage") t = "fire";
+    if (t === "fire") document.body.setAttribute("data-theme", "fire"); else document.body.removeAttribute("data-theme");
+    try { localStorage.setItem("neet2027-theme", t); } catch(e) {}
+    $("thNeon").className = t === "fire" ? "" : "on"; $("thFire").className = t === "fire" ? "on" : "";
+  }
+  [["spd1",1],["spd125",1.25],["spd15",1.5]].forEach(function(x){
+    $(x[0]).addEventListener("click", function(){ state.skip = state.skip || { days: 0, hours: null, win: 7, sp: 1 }; state.skip.sp = x[1]; save(); renderTracker(); if (!$("focus").hidden) renderFocus(true); });
+  });
+  $("thNeon").addEventListener("click", function(){ setTheme("neon"); });
+  $("thFire").addEventListener("click", function(){ setTheme("fire"); });
+  setTheme(document.body.getAttribute("data-theme") === "fire" ? "fire" : "neon");
+  function applyCfg(total, hrs, left){
+    total = Math.min(5000, Math.max(1, Math.round(Number(total) || TOTAL_LECTURES)));
+    hrs = Math.min(12, Math.max(0.25, Math.round((Number(hrs) || HOURS_PER) * 100) / 100));
+    TOTAL_LECTURES = total; HOURS_PER = hrs; state.cfg = { total: total, hours: hrs, start: null };
+    if (left !== null) state.completed = total - Math.min(total, Math.max(0, Math.round(Number(left) || 0)));
+    else state.completed = Math.min(state.completed, total);
+    var k = dayKey(); if ((state.log[k] || 0) > state.completed) state.log[k] = state.completed;   // keep today's count sensible
+    state.cfg.start = k; state.cfg.c0 = state.completed - (state.log[k] || 0);                       // new baseline for the progress check
+    save(); renderTracker(); renderFocus(true);
+  }
+  $("cfgTotal").addEventListener("change", function(){ applyCfg($("cfgTotal").value, HOURS_PER, null); });
+  $("cfgHours").addEventListener("change", function(){ applyCfg(TOTAL_LECTURES, $("cfgHours").value, null); });
+  $("cfgLeft").addEventListener("change", function(){ applyCfg(TOTAL_LECTURES, HOURS_PER, $("cfgLeft").value); });
+  ["cfgTotal","cfgHours","cfgLeft"].forEach(function(id){ $(id).addEventListener("blur", renderTracker); });
+  $("fFinish").addEventListener("click", function(){ finishTask(false); });
+  $("fSkip").addEventListener("click", function(){ finishTask(true); });
+  $("lInc").addEventListener("click", function(){ state.notes = (state.notes || 0) + 1; setToday((state.log[dayKey()] || 0) + 1); renderFocus(true); });
+  $("lDec").addEventListener("click", function(){ setToday((state.log[dayKey()] || 0) - 1); renderFocus(true); });
+  $("nInc").addEventListener("click", function(){ state.notes = (state.notes || 0) + 1; save(); renderFocus(true); });
+  $("nDec").addEventListener("click", function(){ state.notes = Math.max(0, (state.notes || 0) - 1); save(); renderFocus(true); });
+  $("fBack").addEventListener("click", function(){ showView("home"); });
+  $("fTimer").addEventListener("click", function(){
+    if (!timer.on) {
+      timer.base = focusToday(); timer.start = Date.now(); timer.lastSave = Date.now(); timer.on = true;
+    } else {
+      state.focus[dayKey()] = timer.base + (Date.now() - timer.start) / 3600000;
+      timer.on = false; save();
+    }
+    renderFocus(true);
+  });
+  function nudge(field, delta){
+    if (field === "wake" && startedToday()) state.dayStart.min = (((state.dayStart.min + delta) % 1440) + 1440) % 1440;
+    else state.settings[field] = (((state.settings[field] + delta) % 1440) + 1440) % 1440;
+    save(); renderFocus(true);
+  }
+  $("bDec").addEventListener("click", function(){ nudge("bed", -30); });
+  $("bInc").addEventListener("click", function(){ nudge("bed", 30); });
+  $("fBlocks").addEventListener("click", function(e){
+    var el = e.target.closest ? e.target.closest(".block") : null;
+    if (!el) return;
+    var abs = el.getAttribute("data-k");
+    var cur = state.plan[abs] || PATTERN[((Number(abs) % 4) + 4) % 4];
+    var idx = TYPES.map(function(x){ return x.k; }).indexOf(cur);
+    state.plan[abs] = TYPES[(idx + 1) % TYPES.length].k;
+    save(); renderFocus(true);
+  });
+  document.addEventListener("visibilitychange", function(){ if (!document.hidden) { renderClock(); tickFocus(); } });
+
+  renderClock(); renderTracker();
+  setInterval(function(){ renderClock(); tickFocus(); }, 1000);
+  // refresh the pace once a minute so it rolls over at midnight
+  setInterval(renderTracker, 60000);
+})();
+</script>
+<script>try{if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)navigator.serviceWorker.register("sw.js")}catch(e){}</script>
+</body>
+</html>
