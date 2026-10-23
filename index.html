@@ -96,6 +96,28 @@ td.hot{color:#ff8fa3;font-weight:600}
 
 /* ===== Dynamic Focus view ===== */
 .view[hidden]{display:none!important}
+.nowbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;padding:4px 0 6px;background:rgba(5,10,28,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.nowbar b{letter-spacing:.24em;font-size:.8rem;text-shadow:0 0 12px rgba(var(--cy),.8)}
+.nowbar small{margin-left:auto;color:var(--muted);font-size:.75rem;text-align:right}
+.xbtn{flex:none;width:26px;height:26px;border-radius:50%;border:1px solid var(--line);background:rgba(var(--dk),.35);color:#fff;font-size:.7rem;line-height:1;padding:0;cursor:pointer;box-shadow:none;position:relative}
+.xbtn::after{content:"";position:absolute;inset:-9px}
+.xbtn:active{transform:scale(.92);border-color:var(--pink)}
+.chips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.chip{background:rgba(var(--dk),.13);border:1px solid var(--line);box-shadow:var(--glow);border-radius:14px;padding:10px 6px;text-align:center}
+.chip b{display:block;font-size:1.2rem;font-variant-numeric:tabular-nums;text-shadow:0 0 10px rgba(var(--cy),.55)}
+.chip span{font-size:.72rem;color:var(--muted)}
+details.more>summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;font-weight:700;color:var(--cyan);letter-spacing:.12em;font-size:.85rem;text-transform:uppercase;padding:2px 0}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary::after{content:"+";font-size:1.4rem;line-height:1}
+details.more[open]>summary::after{content:"\2212"}
+details.more[open]>summary{margin-bottom:14px}
+.dbrow{display:flex;gap:8px;margin-top:10px}
+.dbrow input{flex:1;min-width:0;height:48px;padding:0 14px;border-radius:14px;border:1px solid var(--line);background:rgba(var(--dk),.14);box-shadow:var(--glow);font-size:1rem}
+.dbrow button{flex:none;height:48px;padding:0 18px;border-radius:14px;border:1px solid rgba(var(--cy),.5);background:rgba(var(--dk),.2);color:var(--cyan);font-weight:800;cursor:pointer}
+.dbitem{display:flex;align-items:center;gap:10px;padding:10px 12px;margin-top:8px;border-radius:14px;border:1px solid var(--line);background:rgba(var(--dk),.18);font-size:.95rem;overflow-wrap:anywhere}
+.dbitem span{flex:1;min-width:0}
+.dbitem button{flex:none;width:36px;height:36px;border-radius:50%;border:1px solid rgba(var(--okc),.7);background:none;color:var(--ok);font-size:1rem;cursor:pointer}
+.dbhint{margin-top:8px;font-size:.85rem;color:var(--pink)}
 .nowbtn{margin-left:auto;padding:10px 24px;border-radius:99px;border:1px solid rgba(var(--pk),.65);cursor:pointer;color:#fff;font-weight:800;letter-spacing:.12em;
   background:linear-gradient(90deg,rgba(var(--cy),.18),rgba(var(--pk),.24));text-shadow:0 0 10px rgba(var(--pk),.85);
   box-shadow:0 0 14px rgba(var(--pk),.5),inset 0 0 10px rgba(var(--cy),.22);transition:.15s}
@@ -192,6 +214,7 @@ body[data-theme="fire"] .status.warn,body[data-theme="fire"] .hot{color:#ff6b6b}
     <h2>Your NEET journey</h2>
     <div class="fbody" id="startTxt"></div>
     <button class="cta" id="startBtn" type="button" style="margin-top:12px">Start NEET</button>
+    <button class="ghost" id="restartBtn" type="button" style="margin-top:12px;display:none">Start again from now</button>
   </section>
 
   <section class="panel hero" aria-live="off">
@@ -251,6 +274,12 @@ body[data-theme="fire"] .status.warn,body[data-theme="fire"] .hot{color:#ff6b6b}
     <div class="label" id="cfgSum" style="text-align:left;margin-top:4px"></div>
     <h2 style="margin-top:18px">Watching speed</h2>
     <div class="themebtns" style="grid-template-columns:repeat(3,minmax(0,1fr))"><button type="button" id="spd1">1x</button><button type="button" id="spd125">1.25x</button><button type="button" id="spd15">1.5x</button></div>
+    <h2 style="margin-top:18px">Day history</h2>
+    <div class="label" style="text-align:left;margin-bottom:8px">When you started each day and what you watched. Starting again never erases this.</div>
+    <table><thead><tr><th>Day</th><th>Started</th><th>Watched</th></tr></thead><tbody id="dhBody"></tbody></table>
+    <h2 style="margin-top:18px">Start again</h2>
+    <div class="label" style="text-align:left;margin-bottom:10px">Fell behind today? Press this and your timetable is rebuilt from this moment. Lectures already watched stay counted.</div>
+    <button class="ghost" id="restartBtn2" type="button">Start again from now</button>
     <h2 style="margin-top:18px">Look</h2>
     <div class="themebtns"><button type="button" id="thNeon">Neon Blue</button><button type="button" id="thFire">Neon Fire</button></div>
   </section>
@@ -262,29 +291,48 @@ body[data-theme="fire"] .status.warn,body[data-theme="fire"] .hot{color:#ff6b6b}
 </main>
 
 <main class="view" id="focus" hidden>
-  <div class="kick">DYNAMIC FOCUS DASHBOARD</div>
+  <div class="nowbar"><button class="xbtn" id="fClose" type="button" aria-label="Close and go back to Overview">&#10005;</button><b>NOW</b><small id="nbSub"></small></div>
 
   <section class="panel">
-    <h2>Do this now</h2>
     <div class="fdo" id="dnT"></div>
     <div class="fbody" id="dnS"></div>
     <div class="fbody" id="dnTag" style="margin-top:8px"></div>
     <div class="dnc" id="dnC"></div>
-    <div class="dnbtns" id="dnBtns"><button class="cta" id="fFinish" type="button">Done</button><button class="ghost" id="fSkip" type="button">Skip</button></div>
+    <div class="dnbtns" id="dnBtns" style="margin-top:14px"><button class="cta" id="fFinish" type="button">Done</button><button class="ghost" id="fSkip" type="button">Skip</button></div>
     <div class="dnnext" id="dnNext"></div>
-    <div class="setrow" style="margin-top:16px"><div class="setbox" style="grid-column:1/3"><span>LECTURES WATCHED TODAY</span><div class="setctl"><button class="step mini" id="lDec" type="button" aria-label="One lecture less">−</button><output id="lVal">0</output><button class="step mini" id="lInc" type="button" aria-label="One lecture more">+</button></div></div></div>
+  </section>
+
+  <div class="chips">
+    <div class="chip"><b id="chL">0/0</b><span>lectures today</span></div>
+    <div class="chip"><b id="chB">0h 0m</b><span>until bed</span></div>
+    <div class="chip"><b id="chS">0</b><span>day streak</span></div>
+  </div>
+
+  <section class="panel" id="doubtCard">
+    <h2>Doubt box</h2>
+    <div class="fbody" id="dbSum" style="color:var(--muted);font-size:.88rem"></div>
+    <div class="dbrow"><input type="text" id="dbIn" maxlength="120" placeholder="Type a doubt, then keep studying" autocomplete="off"><button id="dbAdd" type="button">Add</button></div>
+    <div id="dbList"></div>
+    <div class="dbhint" id="dbHint"></div>
+  </section>
+
+  <section class="panel"><details class="more">
+    <summary>Today's schedule</summary>
+    <div class="hint">Everything left today, in order. It updates when you press Done.</div>
+    <div class="blocks" id="fBlocks"></div>
+    <div class="fsum" id="fSum"></div>
+  </details></section>
+
+  <section class="panel"><details class="more">
+    <summary>Adjust counts</summary>
+    <div class="setrow" style="margin-top:0"><div class="setbox" style="grid-column:1/3"><span>LECTURES WATCHED TODAY</span><div class="setctl"><button class="step mini" id="lDec" type="button" aria-label="One lecture less">−</button><output id="lVal">0</output><button class="step mini" id="lInc" type="button" aria-label="One lecture more">+</button></div></div></div>
+    <div style="height:10px"></div>
     <div class="setrow" style="margin-top:10px"><div class="setbox" style="grid-column:1/3"><span>LECTURES WITHOUT NOTES</span><div class="setctl"><button class="step mini" id="nDec" type="button" aria-label="One note less">−</button><output id="nVal">0</output><button class="step mini" id="nInc" type="button" aria-label="One note more">+</button></div></div></div>
     <div class="fbody" id="dnFoot" style="margin-top:12px"></div>
-    <button class="link" id="fEnd" type="button" style="margin-top:8px">Good night (end today)</button>
-  </section>
+  </details></section>
 
-  <section class="panel">
-    <h2>Progress check</h2>
-    <div class="fbody" id="pgBody"></div>
-  </section>
-
-  <section class="panel">
-    <h2>Waking-day status</h2>
+  <section class="panel"><details class="more">
+    <summary>Day status and bedtime</summary>
     <div class="fbig" id="fHours">0m</div>
     <div class="fsub">left until bed</div>
     <div class="fbody" id="fWoke"></div>
@@ -294,10 +342,7 @@ body[data-theme="fire"] .status.warn,body[data-theme="fire"] .hot{color:#ff6b6b}
       <div class="setbox"><span>BEDTIME</span><div class="setctl">
         <button class="step mini" id="bDec" type="button" aria-label="Bedtime 30 minutes earlier">−</button><output id="bVal"></output><button class="step mini" id="bInc" type="button" aria-label="Bedtime 30 minutes later">+</button></div></div>
     </div>
-  </section>
-
-  <section class="panel">
-    <h2>Live target adapter</h2>
+    <h2 style="margin-top:20px">Live target</h2>
     <div class="stats three">
       <div class="stat"><b id="fRemH">0</b><span>to study today</span></div>
       <div class="stat"><b id="fRemL">0</b><span>lectures left</span></div>
@@ -306,10 +351,13 @@ body[data-theme="fire"] .status.warn,body[data-theme="fire"] .hot{color:#ff6b6b}
     <div class="fbody" id="fLine1"></div>
     <div class="fbody" id="fLine2" style="margin-top:6px"></div>
     <div class="status" id="fStatus"></div>
-  </section>
+  </details></section>
 
-  <section class="panel">
-    <h2>Exam plan</h2>
+  <section class="panel"><details class="more">
+    <summary>Plan, catch-up and timetable</summary>
+    <h2>Progress check</h2>
+    <div class="fbody" id="pgBody"></div>
+    <h2 style="margin-top:20px">Exam plan</h2>
     <div class="fbody" id="pCheck"></div>
     <div class="fbody" id="pRec" style="margin-top:8px"></div>
     <table style="margin-top:12px"><thead><tr><th>Speed</th><th id="pH1">By finish</th><th>By exam</th></tr></thead><tbody id="pTable"></tbody></table>
@@ -332,23 +380,17 @@ body[data-theme="fire"] .status.warn,body[data-theme="fire"] .hot{color:#ff6b6b}
       <div class="setbox"><span>SPEED</span><div class="setctl"><button class="step mini" type="button" data-sk="sp" data-d="-1" aria-label="Slower">−</button><output id="skS">1x</output><button class="step mini" type="button" data-sk="sp" data-d="1" aria-label="Faster">+</button></div></div>
     </div>
     <div class="fbody" id="pPlan" style="margin-top:14px"></div>
-  </section>
-
-  <section class="panel">
-    <h2>Today's schedule</h2>
-    <div class="hint">Everything left today, in order. It updates when you press Done.</div>
-    <div class="blocks" id="fBlocks"></div>
-    <div class="fsum" id="fSum"></div>
-  </section>
-
-  <section class="panel">
-    <h2>Full timetable</h2>
+    <h2 style="margin-top:20px">Full timetable</h2>
     <div class="fbody" id="ftBody"></div>
-  </section>
+  </details></section>
 
   <button class="cta" id="fTimer" type="button">Start Focus Timer</button>
   <div class="live" id="fLive" hidden>Logging study time live…</div>
   <button class="ghost" id="fBack" type="button">Back to Overview</button>
+  <div style="text-align:center">
+    <button class="link" id="fRestart" type="button">Start again from now</button>
+    <button class="link" id="fEnd" type="button">Good night (end today)</button>
+  </div>
 </main>
 
 <script>
@@ -381,6 +423,8 @@ body[data-theme="fire"] .status.warn,body[data-theme="fire"] .hot{color:#ff6b6b}
       if (saved.flow && saved.flow.day) state.flow = saved.flow;
       if (saved.journey && saved.journey.started) state.journey = saved.journey;
       if (saved.dayStart && saved.dayStart.day) state.dayStart = saved.dayStart;
+      if (Array.isArray(saved.doubts)) state.doubts = saved.doubts;
+      if (Array.isArray(saved.startLog)) state.startLog = saved.startLog;
       if (saved.settings && typeof saved.settings.wake === "number" && typeof saved.settings.bed === "number") state.settings = saved.settings;
     }
   } catch(e) {}
@@ -390,6 +434,14 @@ body[data-theme="fire"] .status.warn,body[data-theme="fire"] .hot{color:#ff6b6b}
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
   }
   // A day starts only when you press Start NEET. It is saved, so reopening the app never resets it.
+  function logStart(kind, min){
+    var l = state.startLog = state.startLog || [];
+    l.push({ day: dayKey(), min: min, ms: Date.now(), kind: kind });
+    if (l.length > 800) l.splice(0, l.length - 800);
+  }
+  if (state.dayStart && state.dayStart.day && !(state.startLog || []).some(function(e){ return e.day === state.dayStart.day; })) {
+    (state.startLog = state.startLog || []).push({ day: state.dayStart.day, min: state.dayStart.min, ms: state.dayStart.ms || 0, kind: "start" });
+  }
   function startedToday(){ return !!(state.dayStart && state.dayStart.day === dayKey()); }
   function dayOver(){ return !!(state.dayStart && state.dayStart.day === dayKey() && state.dayStart.over); }
   function canStartNow(){
@@ -453,12 +505,13 @@ body[data-theme="fire"] .status.warn,body[data-theme="fire"] .hot{color:#ff6b6b}
     if (sdn) {
       $("startTxt").innerHTML = "<b>Day " + dn + "</b> · started <b>" + fmtClock(state.dayStart.min) + "</b> · bed <b>" + fmtClock(state.settings.bed) + "</b>." + (dayOver() ? "<br>Good night. A new Start NEET appears tomorrow." : "<br>Exam: <b>2 May 2027</b>. Open <b>Now</b> for your next step.");
       $("startBtn").style.display = "none";
+      $("restartBtn").style.display = dayOver() ? "none" : ""; $("restartBtn").textContent = "Start again from now";
     } else if (canStartNow()) {
       $("startTxt").innerHTML = jr ? "<b>New day.</b> Press <b>Start NEET</b> when you are up and ready. Your plan starts from that moment." : "Not started yet. Press <b>Start NEET</b> when you are ready. Day 1 starts that moment.";
-      $("startBtn").style.display = "";
+      $("startBtn").style.display = ""; $("restartBtn").style.display = "none";
     } else {
       $("startTxt").innerHTML = "Good night. The <b>Start NEET</b> button comes back when you wake up. Press it whenever you are up.";
-      $("startBtn").style.display = "none";
+      $("startBtn").style.display = "none"; $("restartBtn").style.display = ""; $("restartBtn").textContent = "I am up. Start now";
     }
     $("lblToday").textContent = "Lectures watched today (" + hpl + " h each)";
     $("footTotal").textContent = "Saved on this device. Total: " + fmt(TOTAL_LECTURES) + " lectures × " + hpl + " h = " + fmt(totH, totH % 1 ? 1 : 0) + " h.";
@@ -505,6 +558,19 @@ body[data-theme="fire"] .status.warn,body[data-theme="fire"] .hot{color:#ff6b6b}
       hr += "<tr><td>" + d.toLocaleDateString("en-IN", { weekday: "short", day: "numeric", month: "short" }) + (k === dayKey() ? " (today)" : "") + "</td><td>" + state.log[k] + "</td><td>" + hm(state.log[k] * HOURS_PER) + "</td></tr>";
     });
     $("histBody").innerHTML = hr;
+    var dm = {};
+    (state.startLog || []).forEach(function(e){ (dm[e.day] = dm[e.day] || []).push(e); });
+    Object.keys(state.log).forEach(function(k){ if (state.log[k] > 0 && !dm[k]) dm[k] = []; });
+    var dh = "";
+    Object.keys(dm).sort().reverse().slice(0, 30).forEach(function(k){
+      var q = k.split("-"), d = new Date(+q[0], +q[1] - 1, +q[2]), ev = dm[k], lc = state.log[k] || 0, fh = state.focus[k] || 0;
+      var st = ev.length ? fmtClock(ev[0].min) : "–";
+      var again = ev.slice(1).map(function(e){ return fmtClock(e.min); });
+      dh += "<tr><td>" + d.toLocaleDateString("en-IN", { weekday: "short", day: "numeric", month: "short" }) + (k === dayKey() ? " (today)" : "") + "</td><td>" + st +
+            (again.length ? "<br><small style='color:var(--muted)'>again " + again.join(", ") + "</small>" : "") + "</td><td>" + lc + " lec · " + hm(lc * HOURS_PER) +
+            (fh > 0.01 ? "<br><small style='color:var(--muted)'>timer " + hm(fh) + "</small>" : "") + "</td></tr>";
+    });
+    $("dhBody").innerHTML = dh || "<tr><td colspan='3' style='text-align:center;color:var(--muted)'>Nothing yet. Press Start NEET to begin.</td></tr>";
     $("histSum").innerHTML = "Watched so far: <b>" + state.completed + "</b> of " + TOTAL_LECTURES + ". Plan: <b>" + fmt(PN.perL, 1) + "</b> a day. Only the <i>today</i> counter starts at 0 each midnight; your total is never lost.";
   }
 
@@ -607,7 +673,19 @@ body[data-theme="fire"] .status.warn,body[data-theme="fire"] .hot{color:#ff6b6b}
       state.cfg.start = k; state.cfg.c0 = state.completed - (state.log[k] || 0);
     }
     state.dayStart = { day: k, min: n.getHours() * 60 + n.getMinutes(), ms: Date.now(), over: false };
+    logStart("start", state.dayStart.min);
     state.flow = null; save(); showView("focus");
+  }
+  function restartDay(){
+    var k = dayKey(), n = new Date(), was = startedToday() && !dayOver();
+    if (!confirm(was ? "Start again from now? Your plan for today is rebuilt from this moment. Lectures you already watched today stay counted." : "Start your day now?")) return;
+    if (!state.journey.started) {
+      state.journey = { started: true, ms: Date.now() };
+      state.cfg.start = k; state.cfg.c0 = state.completed - (state.log[k] || 0);
+    }
+    state.dayStart = { day: k, min: n.getHours() * 60 + n.getMinutes(), ms: Date.now(), over: false };
+    logStart(was ? "again" : "start", state.dayStart.min);
+    state.flow = null; save(); renderTracker(); renderFocus(true); showView("focus");
   }
   function endDay(){
     if (!startedToday() || dayOver()) return;
@@ -768,7 +846,7 @@ body[data-theme="fire"] .status.warn,body[data-theme="fire"] .hot{color:#ff6b6b}
       $("dnBtns").style.display = cur.k === "end" ? "none" : "grid";
       $("fSkip").style.display = cur.k === "lec" ? "" : "none";
       $("dnBtns").style.gridTemplateColumns = cur.k === "lec" ? "minmax(0,2fr) minmax(0,1fr)" : "minmax(0,1fr)";
-      var nx = plan.slice(1, 4).map(function(g){
+      var nx = plan.slice(1, 3).map(function(g){
         return "<div class='srow' style='--c:" + KCOL[g.k] + "'><span class='st'>" + clockOf(g.start) + "</span><span><b>" + g.t + "</b></span><span class='sd'>" + hm(g.m / 60) + "</span></div>";
       }).join("");
       $("dnNext").innerHTML = nx ? "<h3>NEXT</h3>" + nx : "";
@@ -783,9 +861,15 @@ body[data-theme="fire"] .status.warn,body[data-theme="fire"] .hot{color:#ff6b6b}
       $("dnC").textContent = ""; $("dnTag").innerHTML = ""; $("dnNext").innerHTML = "";
       $("dnBtns").style.display = cs ? "grid" : "none"; $("dnBtns").style.gridTemplateColumns = "minmax(0,1fr)"; $("fSkip").style.display = "none";
     }
-    $("fEnd").style.display = (started && !dayOver()) ? "" : "none";
+    $("fEnd").style.display = (started && !dayOver()) ? "" : "none"; $("fRestart").style.display = (started && !dayOver()) ? "" : "none";
     $("fFinish").textContent = started ? "Done" : "Start NEET";
     $("lVal").textContent = lecToday; $("nVal").textContent = state.notes || 0;
+    $("chL").textContent = lecToday + "/" + lecTarget;
+    $("chB").textContent = Math.floor(lm / 60) + "h " + (lm % 60) + "m";
+    $("chS").textContent = streakDays();
+    $("nbSub").textContent = started ? (dayOver() ? "Good night" : "Started " + fmtClock(W)) : "Not started";
+    var openD = (state.doubts || []).filter(function(d){ return !d.ok; }).length;
+    $("dbHint").textContent = (openD > 0 && cur && cur.k === "rev") ? "Questions time. Clear your " + openD + " open doubt" + (openD > 1 ? "s" : "") + " now." : "";
     var P = plan.filter(function(g){ return g.k === "lec"; }).length, need = Math.max(0, lecTarget - lecToday), short = Math.max(0, need - P);
     $("dnFoot").innerHTML = "Target today: <b>" + lecTarget + "</b> lectures. Done: <b>" + lecToday + "</b>. Planned: <b>" + P + "</b>." +
       (short > 0 ? "<br><span style='color:#ff8fa3'>Short by " + short + " lecture" + (short > 1 ? "s" : "") + ". It goes to your backlog.</span>"
@@ -914,14 +998,50 @@ body[data-theme="fire"] .status.warn,body[data-theme="fire"] .hot{color:#ff6b6b}
     renderFocus(false);
   }
 
+  function esc(t){ return String(t).replace(/[&<>"]/g, function(c){ return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function keyOf(d){ return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0"); }
+  function streakDays(){
+    var d = new Date(), n = 0;
+    if (!((state.log[keyOf(d)] || 0) > 0)) d.setDate(d.getDate() - 1);
+    while (n < 400 && (state.log[keyOf(d)] || 0) > 0) { n++; d.setDate(d.getDate() - 1); }
+    return n;
+  }
+  function renderDoubts(){
+    var arr = state.doubts || [], k = dayKey(), open = 0, cleared = 0, h = "";
+    arr.forEach(function(d, i){
+      if (d.ok) { if (d.okDay === k) cleared++; return; }
+      open++;
+      if (open <= 8) h += "<div class='dbitem'><span>" + esc(d.t) + "</span><button type='button' data-db='" + i + "' aria-label='Mark cleared'>&#10003;</button></div>";
+    });
+    $("dbSum").textContent = open ? "Open: " + open + " · Cleared today: " + cleared : (cleared ? "All clear. Cleared today: " + cleared : "Nothing open. Note a doubt the moment it appears.");
+    $("dbList").innerHTML = h;
+  }
+  function addDoubt(){
+    var v = $("dbIn").value.replace(/\s+/g, " ").trim(); if (!v) return;
+    var k = dayKey(); state.doubts = (state.doubts || []).filter(function(d){ return !d.ok || d.okDay === k; });
+    state.doubts.unshift({ t: v.slice(0, 120), day: k, ok: false });
+    if (state.doubts.length > 80) state.doubts.length = 80;
+    $("dbIn").value = ""; save(); renderDoubts(); renderFocus(true);
+  }
+  $("dbAdd").addEventListener("click", addDoubt);
+  $("dbIn").addEventListener("keydown", function(e){ if (e.key === "Enter") { e.preventDefault(); addDoubt(); } });
+  $("dbList").addEventListener("click", function(e){
+    var b = e.target.closest ? e.target.closest("[data-db]") : null; if (!b) return;
+    var d = (state.doubts || [])[+b.getAttribute("data-db")]; if (!d) return;
+    d.ok = true; d.okDay = dayKey(); save(); renderDoubts(); renderFocus(true);
+  });
+  $("fClose").addEventListener("click", function(){ showView("home"); });
   function showView(name){
     $("home").hidden = name !== "home";
     $("focus").hidden = name !== "focus";
     window.scrollTo(0, 0);
-    if (name === "focus") renderFocus(true); else renderTracker();
+    if (name === "focus") { renderFocus(true); renderDoubts(); } else renderTracker();
   }
 
   $("startBtn").addEventListener("click", startJourney);
+  $("restartBtn").addEventListener("click", restartDay);
+  $("restartBtn2").addEventListener("click", restartDay);
+  $("fRestart").addEventListener("click", restartDay);
   $("fEnd").addEventListener("click", endDay);
   $("nowBtn").addEventListener("click", function(){ showView("focus"); });
   $("focus").addEventListener("click", function(e){
